@@ -1,0 +1,78 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles/partials/typography" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.sign {
+  display: flex;
+  flex-direction: column;
+
+  &__heading-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 1.5rem;
+  }
+
+  &__heading-welcome {
+    color: $white;
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    width: 85vw;
+  }
+
+  &__label {
+    color: $white;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__form-input {
+    padding: 0.5rem;
+    border: transparent;
+    border-radius: 0.5rem;
+    background: linear-gradient(
+      90deg,
+      rgba(238, 174, 202, 0.8),
+      rgba(148, 187, 233, 0.8)
+    );
+    margin-bottom: 1rem;
+    color: $white;
+    &::placeholder {
+      color: $white;
+    }
+  }
+
+  &__container-login {
+    display: flex;
+    justify-content: center;
+  }
+  &__sign-button {
+    background-color: $white;
+    color: $instock-black;
+    border: transparent;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 100vw;
+    margin-bottom: 2rem;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  &__option-text {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1.5rem;
+  }
+  &__small-text {
+    color: $white;
+    font-size: 1rem;
+    line-height: 1.75rem;
+  }
+}
