@@ -11,25 +11,9 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-// // export const auth = app.auth();
-// export default app;
-const provider = new GoogleAuthProvider();
-
-export const signInWithGoogle = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const name = result.user.displayName;
-      const email = result.user.email;
-      localStorage.setItem("name", name);
-      localStorage.setItem("email", email);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+export const db = getFirestore(app);

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase-config";
+import { auth, db } from "../../firebase-config";
 import "./SignUp.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { setDoc, doc } from "firebase/firestore";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const signUp = (e) => {
     e.preventDefault();
@@ -22,10 +24,13 @@ export default function SignUp() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        const userID = userCredential.user.uid;
+        setDoc(doc(db, "users", userID), { email: email });
+        alert("Account has been successfully created");
+        navigate("/");
       })
       .catch((error) => {
-        alert("Failed to create account");
+        alert("Failed to create account", error);
         return;
       });
   };

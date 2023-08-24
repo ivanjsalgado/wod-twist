@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import "./Login.scss";
-import { signInWithGoogle, auth } from "../../firebase-config";
+import { googleProvider, auth } from "../../firebase-config";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -14,13 +18,31 @@ const Login = () => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        navigate("/home");
         console.log(userCredential);
+        let user = userCredential.user.uid;
+        navigate(`/home`, { state: user });
       })
       .catch((error) => {
         alert("Invalid user email and/or password");
         return;
       });
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/home");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -65,6 +87,7 @@ const Login = () => {
           Sign in with Google
         </button>
       </div>
+      {/* <button onClick={logout}>Logout</button> */}
     </div>
   );
 };
