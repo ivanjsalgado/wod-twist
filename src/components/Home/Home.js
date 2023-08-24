@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
 import { getDoc, doc } from "firebase/firestore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
@@ -12,9 +12,15 @@ import Leaderboard from "../../assets/images/noun-leaderboard-2696196.png";
 export default function Home() {
   const [random, setRandom] = useState("");
   let location = useLocation();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     console.log("Click");
+  };
+
+  const historyClick = () => {
+    // Include the props to pass into history, probably UID
+    navigate("/history");
   };
 
   useEffect(() => {
@@ -52,7 +58,7 @@ export default function Home() {
       </div>
       <div className="home__bot-container">
         <img
-          onClick={handleClick}
+          onClick={historyClick}
           className="home__footer-btn"
           src={History}
           alt="History Icon"
