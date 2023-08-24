@@ -1,0 +1,84 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+
+  &__top-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__profile {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+  &__logo {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    background-image: url("../../assets/icons/noun-workout-2397485.svg");
+  }
+
+  &__hamburger {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    background-image: url("../../assets/icons/noun-setting-4951792.svg");
+    background-repeat: no-repeat;
+  }
+
+  &__deadline {
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  &__time {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  &__workout-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__workout {
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+    border: transparent;
+    border-radius: 0.5rem;
+  }
+
+  &__graph {
+    display: flex;
+    justify-content: center;
+  }
+  &__bot-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__footer-btn {
+    width: 50px;
+    height: 50px;
+
+    &--margin-right {
+      margin-right: 2rem;
+    }
+  }
+}
