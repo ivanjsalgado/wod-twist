@@ -1,0 +1,31 @@
+.ranking {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+  &__container {
+    display: flex;
+    width: 80vw;
+    border: 1px solid black;
+    border-radius: 1.5rem;
+  }
+  &__pic {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+
+  &__container-user {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 1rem;
+  }
+
+  &__rank {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
+    margin-right: 1rem;
+  }
+}
