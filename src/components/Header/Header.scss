@@ -1,6 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   &__profile {
     display: flex;
@@ -11,9 +12,9 @@
 
   &__logo {
     display: flex;
-    height: 50px;
-    width: 50px;
-    background-image: url("../../assets/icons/noun-workout-2397485.svg");
+    height: 75px;
+    width: 150px;
+    background-image: url("../../assets/images/IMG-5638.PNG");
   }
 
   &__hamburger {

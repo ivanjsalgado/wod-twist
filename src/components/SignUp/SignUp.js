@@ -73,8 +73,9 @@ export default function SignUp() {
           </div>
         </form>
         <div className="sign__option-text">
-          <Link to={"/"} style={{ textDecoration: "none" }}>
-            <p className="sign__small-text">Have an account? Log in</p>
+          <Link to={"/"} style={{ textDecoration: "none", display: "flex" }}>
+            <p className="sign__small-text">Have an account?</p>
+            <p className="sign__small-text sign__small-text--ml">Log in</p>
           </Link>
         </div>
       </div>

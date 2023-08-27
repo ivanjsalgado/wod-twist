@@ -7,7 +7,7 @@ import "./Home.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import History from "../../assets/images/noun-recent-1076890.svg";
 import Match from "../../assets/images/noun-group-4213640.svg";
-import Leaderboard from "../../assets/images/noun-leaderboard-2696196.png";
+import Leaderboard from "../../assets/images/Adobe_test.svg";
 import Header from "../Header/Header";
 
 export default function Home() {

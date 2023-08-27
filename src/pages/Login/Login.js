@@ -8,6 +8,7 @@ import "./Login.scss";
 import { googleProvider, auth } from "../../firebase-config";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/images/IMG-5638.PNG";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -48,7 +49,8 @@ const Login = () => {
   return (
     <div className="login">
       <div className="login__heading-container">
-        <h1 className="login__heading-welcome">Welcome!</h1>
+        <h1 className="login__heading-welcome">Welcome to</h1>
+        <img className="login__logo" src={Logo} alt="Logo" />
       </div>
       <form onSubmit={signIn} className="login__form">
         <input
@@ -75,8 +77,12 @@ const Login = () => {
         </div>
       </form>
       <div className="login__sign-container">
-        <Link to={"/signup"} style={{ textDecoration: "none" }}>
-          <p className="login__sign-up">Don't have an account? Sign up</p>
+        <Link
+          to={"/signup"}
+          style={{ textDecoration: "none", display: "flex" }}
+        >
+          <p className="login__sign-up">Don't have an account?</p>
+          <p className="login__sign-up login__sign-up--ml">Sign up</p>
         </Link>
       </div>
       <div className="login__option-text">
