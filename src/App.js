@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import Home from "./components/Home/Home";
 import History from "./components/History/History";
+import Leaderboard from "./components/Leaderboard/Leaderboard";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/history" element={<History />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </BrowserRouter>
     </div>

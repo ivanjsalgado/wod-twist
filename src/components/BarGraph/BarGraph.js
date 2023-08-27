@@ -27,12 +27,14 @@ function BarGraph() {
       {
         label: "Win Data",
         data: [1, 2, 3, 4, 5],
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        // backgroundColor: "rgba(0, 156, 98, 1",
+        backgroundColor: "rgba(175, 225, 175, 0.6)",
       },
       {
         label: "Loss Data",
         data: [1, 2, 3, 4, 5],
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        // backgroundColor: "rgba(243, 207, 198, 0.6)",
+        backgroundColor: "rgba(210, 4, 45, 1)",
       },
     ],
   };

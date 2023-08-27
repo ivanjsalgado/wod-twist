@@ -7,15 +7,16 @@ import "./Home.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import History from "../../assets/images/noun-recent-1076890.svg";
 import Match from "../../assets/images/noun-group-4213640.svg";
-import Leaderboard from "../../assets/images/noun-leaderboard-2696196.png";
+import Leaderboard from "../../assets/images/Adobe_test.svg";
+import Header from "../Header/Header";
 
 export default function Home() {
   const [random, setRandom] = useState("");
   let location = useLocation();
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    console.log("Click");
+  const leaderboardClick = () => {
+    navigate("/leaderboard");
   };
 
   const historyClick = () => {
@@ -41,11 +42,7 @@ export default function Home() {
   }, []);
   return (
     <div className="home">
-      <div className="home__top-container">
-        <img className="home__profile" src={ProfilePic} alt="Profile Pic" />
-        <div className="home__logo"></div>
-        <div className="home__hamburger"></div>
-      </div>
+      <Header />
       <div className="home__deadline">
         <h1 className="home__title">Workout Deadline</h1>
         <p className="home__time">99:99:99</p>
@@ -65,6 +62,7 @@ export default function Home() {
         />
         <img className="home__footer-btn" src={Match} alt="History Icon" />
         <img
+          onClick={leaderboardClick}
           className="home__footer-btn home__footer-btn--margin-right"
           src={Leaderboard}
           alt="History Icon"

@@ -1,0 +1,27 @@
+.leaderboard {
+  &__header {
+    display: flex;
+    width: 100vw;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  &__back {
+    display: flex;
+    width: 9.5vw;
+    height: 9.5vw;
+  }
+
+  &__heading {
+    display: flex;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  &__photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+  }
+}

@@ -1,19 +1,14 @@
 .round {
   display: flex;
 
-  &:first-of-type .round__container-one {
-    border-top: none;
-  }
-  &:not(:first-of-type) .round__container-one {
-    margin-top: 0.5rem;
-  }
-
   &__container-one {
     display: flex;
     justify-content: space-between;
     width: 100vw;
     background-color: #fafafa;
-    border-top: 1px solid black;
+    border-radius: 0.5rem;
+    border: 1px solid black;
+    margin-top: 1rem;
   }
   &__userOne {
     display: flex;
@@ -21,7 +16,7 @@
     padding-left: 1rem;
     padding-right: 1rem;
     align-items: center;
-    margin-top: 0.5rem;
+    border-radius: 0.5rem;
     &--green {
       background-color: lightgreen;
     }
@@ -84,7 +79,7 @@
     padding-left: 1rem;
     padding-right: 1rem;
     align-items: center;
-    margin-top: 0.5rem;
+    border-radius: 0.5rem;
 
     &--mercury {
       background-color: #e1e1e1;
