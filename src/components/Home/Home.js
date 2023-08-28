@@ -9,6 +9,7 @@ import History from "../../assets/images/noun-recent-1076890.svg";
 import Match from "../../assets/images/noun-group-4213640.svg";
 import Leaderboard from "../../assets/images/Adobe_test.svg";
 import Header from "../Header/Header";
+import Modal from "../Modal/Modal";
 
 export default function Home() {
   const [random, setRandom] = useState("");
@@ -48,7 +49,7 @@ export default function Home() {
         <p className="home__time">99:99:99</p>
       </div>
       <div className="home__workout-container">
-        <button className="home__workout">See Workout</button>
+        <Modal />
       </div>
       <div className="home__graph">
         <BarGraph />
@@ -63,7 +64,7 @@ export default function Home() {
         <img className="home__footer-btn" src={Match} alt="History Icon" />
         <img
           onClick={leaderboardClick}
-          className="home__footer-btn home__footer-btn--margin-right"
+          className="home__footer-btn"
           src={Leaderboard}
           alt="History Icon"
         />
