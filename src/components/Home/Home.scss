@@ -1,14 +1,13 @@
 .home {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
 
   &__deadline {
     display: flex;
     justify-content: center;
-    padding-top: 2rem;
     flex-direction: column;
     align-items: center;
+    padding-top: 6rem;
   }
 
   &__title {
@@ -38,21 +37,19 @@
   &__graph {
     display: flex;
     justify-content: center;
+    padding-top: 2rem;
   }
   &__bot-container {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    padding: 0.5rem 1rem;
   }
 
   &__footer-btn {
     width: 38px;
     height: 38px;
-
-    &--margin-right {
-      margin-right: 2rem;
-    }
   }
 }

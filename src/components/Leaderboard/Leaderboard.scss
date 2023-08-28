@@ -1,5 +1,8 @@
 .leaderboard {
+  margin-top: 5rem;
   &__header {
+    position: fixed;
+    top: 0;
     display: flex;
     width: 100vw;
     justify-content: space-between;

@@ -1,3 +1,4 @@
+import "./BarGraph.scss";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,7 +41,7 @@ function BarGraph() {
   };
   return (
     <div className="bar-graph">
-      <Bar data={data} />
+      <Bar data={data} options={{ maintainAspectRatio: false }} />
     </div>
   );
 }
