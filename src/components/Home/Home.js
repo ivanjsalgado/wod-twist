@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { db } from "../../firebase-config";
 import { getDoc, doc } from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,9 +12,10 @@ import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
 
 export default function Home() {
-  const [random, setRandom] = useState("");
-  let location = useLocation();
+  const loggedInUser = localStorage.getItem("user");
+
   const navigate = useNavigate();
+  const [user, setUser] = useState(loggedInUser);
 
   const leaderboardClick = () => {
     navigate("/leaderboard");
@@ -28,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     const getRandom = async () => {
       try {
-        const snap = await getDoc(doc(db, "users", location.state));
+        const snap = await getDoc(doc(db, "users", user));
 
         if (snap.exists()) {
           console.log(snap.data());
