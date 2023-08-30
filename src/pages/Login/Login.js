@@ -21,7 +21,9 @@ const Login = () => {
       .then((userCredential) => {
         console.log(userCredential);
         let user = userCredential.user.uid;
-        navigate(`/home`, { state: user });
+        localStorage.setItem("user", user);
+        // navigate(`/home`, { state: user });
+        navigate(`/home`);
       })
       .catch((error) => {
         alert("Invalid user email and/or password");

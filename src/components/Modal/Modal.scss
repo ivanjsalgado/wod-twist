@@ -16,6 +16,7 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
+
   &__container-content {
     width: 75vw;
     background-color: #fff;
@@ -55,5 +56,18 @@
 
   &__rounds {
     padding-bottom: 0.5rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    margin-bottom: 0.25rem;
+  }
+
+  &__form-input {
+    margin-bottom: 1rem;
   }
 }

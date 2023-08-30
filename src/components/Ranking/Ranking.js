@@ -1,16 +1,16 @@
 import "./Ranking.scss";
 import Profile from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
-function Ranking() {
+function Ranking({ name, points, index, key }) {
   return (
     <div className="ranking">
       <div className="ranking__container">
         <img className="ranking__pic" src={Profile} alt="User" />
         <div className="ranking__container-user">
-          <p>Ivan Salgado</p>
-          <p>300 Points</p>
+          <p>{name}</p>
+          <p>{points} Points</p>
         </div>
         <div className="ranking__rank">
-          <p>1st</p>
+          <p>{index}</p>
         </div>
       </div>
     </div>

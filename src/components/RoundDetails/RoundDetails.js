@@ -1,7 +1,11 @@
 import "./RoundDetails.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
+import { useState } from "react";
 
 function RoundDetails() {
+  const loggedInUser = localStorage.getItem("user");
+  const [user, setUser] = useState(loggedInUser);
+
   return (
     <div className="round">
       <div className="round__container-one">
@@ -12,7 +16,7 @@ function RoundDetails() {
             alt="User One Profile"
           />
           <h2 className="round__userName">Ivan</h2>
-          <p>9:33</p>
+          <p>9:36</p>
         </div>
         <div className="round__result-container">
           <div className="round__wl-container">
