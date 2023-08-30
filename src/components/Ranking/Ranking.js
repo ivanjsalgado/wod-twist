@@ -1,6 +1,6 @@
 import "./Ranking.scss";
 import Profile from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
-function Ranking({ name, points, rank }) {
+function Ranking({ name, points, index, key }) {
   return (
     <div className="ranking">
       <div className="ranking__container">
@@ -10,7 +10,7 @@ function Ranking({ name, points, rank }) {
           <p>{points} Points</p>
         </div>
         <div className="ranking__rank">
-          <p>{rank}</p>
+          <p>{index}</p>
         </div>
       </div>
     </div>

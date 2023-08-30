@@ -48,7 +48,12 @@ function Leaderboard() {
         <img className="leaderboard__photo" src={Profile} alt="User Profile" />
       </div>
       {userList.map((user, index) => (
-        <Ranking rank={index + 1} name={user.name} points={user.points} />
+        <Ranking
+          key={index}
+          index={index + 1}
+          name={user.name}
+          points={user.points}
+        />
       ))}
     </div>
   );
