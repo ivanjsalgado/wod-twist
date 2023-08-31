@@ -7,22 +7,26 @@ import {
   updateDoc,
   setDoc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import History from "../../assets/images/noun-recent-1076890.svg";
-import Match from "../../assets/images/noun-group-4213640.svg";
+import MatchIcon from "../../assets/images/noun-group-4213640.svg";
+import Match from "../Match/Match";
 import Leaderboard from "../../assets/images/Adobe_test.svg";
 import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
+import { all } from "axios";
 
 export default function Home() {
   const loggedInUser = localStorage.getItem("user");
   const navigate = useNavigate();
   const [user, setUser] = useState(loggedInUser);
   const [userData, setUserData] = useState(null);
+  const [matchID, setMatchID] = useState("");
   const conditionUser = userData === null ? true : false;
 
   const leaderboardClick = () => {
@@ -89,6 +93,7 @@ export default function Home() {
         if (snap.exists()) {
           let data = snap.data();
           setUserData(data);
+          setMatchID(data.match);
           console.log(userData);
         } else {
           console.log("No such document");
@@ -99,6 +104,30 @@ export default function Home() {
     };
     getRandom();
   }, [conditionUser]);
+
+  useEffect(() => {
+    if (matchID === "") return;
+    const unsub = onSnapshot(doc(db, "matches", matchID), (currentMatch) => {
+      const readyForWorkout = async () => {
+        try {
+          const matchRef = doc(db, "matches", matchID);
+          const data = await getDoc(matchRef);
+          const allPropertiesAreTrue = Object.values(data.data()).every(
+            (value) => value === true
+          );
+          if (allPropertiesAreTrue) {
+            const opponentRef = await doc(db, "users", userData.opponent);
+            const getOpponentMovement = await getDoc(opponentRef);
+            const movement = getOpponentMovement.data().movement;
+            console.log(movement);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      readyForWorkout();
+    });
+  }, [matchID]);
 
   if (conditionUser) {
     return <div>Loading...</div>;
@@ -112,7 +141,7 @@ export default function Home() {
         <p className="home__time">99:99:99</p>
       </div>
       <div className="home__workout-container">
-        <Modal />
+        {userData.matched ? <Match data={userData} /> : <></>}
       </div>
       <div className="home__graph">
         <BarGraph />
@@ -127,7 +156,7 @@ export default function Home() {
         <img
           onClick={queueClick}
           className="home__footer-btn"
-          src={Match}
+          src={MatchIcon}
           alt="History Icon"
         />
         <img
