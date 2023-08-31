@@ -1,10 +1,13 @@
 import "./Modal.scss";
 import { useState } from "react";
 
-const Modal = () => {
+const Modal = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
   const [minutes, setMinutes] = useState(null);
   const [seconds, setSeconds] = useState(null);
+  if (data.matched === false || data.movement === "") {
+    return <></>;
+  }
 
   const submit = () => {};
   return (

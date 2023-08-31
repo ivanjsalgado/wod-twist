@@ -10,17 +10,12 @@ import Leaderboard from "./components/Leaderboard/Leaderboard";
 import { db } from "./firebase-config";
 import {
   onSnapshot,
-  getDoc,
   getDocs,
   doc,
-  update,
   updateDoc,
   setDoc,
   deleteDoc,
   collection,
-  getCountFromServer,
-  where,
-  addDoc,
 } from "firebase/firestore";
 
 function App() {
@@ -39,7 +34,6 @@ function App() {
             const userOne = test[0].id;
             const userTwo = test[1].id;
             test.splice(0, 2);
-            const id = crypto.randomUUID();
             // I had to sum the ids because it would create multiple matches otherwise
             setDoc(doc(db, "matches", userOne + userTwo), {
               [userOne]: false,
@@ -49,12 +43,14 @@ function App() {
             const userTwoDoc = doc(db, "users", userTwo);
             await updateDoc(userOneDoc, {
               matched: true,
+              opponent: userTwo,
               match: userOne + userTwo,
               queue: false,
             });
 
             await updateDoc(userTwoDoc, {
               match: userOne + userTwo,
+              opponent: userOne,
               matched: true,
               queue: false,
             });
