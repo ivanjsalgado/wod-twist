@@ -34,10 +34,18 @@ function App() {
             const userOne = test[0].id;
             const userTwo = test[1].id;
             test.splice(0, 2);
+            const matchData = {
+              userSelected: false,
+              opponentTime: 0,
+              userTime: 0,
+              movements: [],
+              repetitions: [],
+              retrievedResult: false,
+            };
             // I had to sum the ids because it would create multiple matches otherwise
             setDoc(doc(db, "matches", userOne + userTwo), {
-              [userOne]: false,
-              [userTwo]: false,
+              [userOne]: matchData,
+              [userTwo]: matchData,
             });
             const userOneDoc = doc(db, "users", userOne);
             const userTwoDoc = doc(db, "users", userTwo);
@@ -46,6 +54,7 @@ function App() {
               opponent: userTwo,
               match: userOne + userTwo,
               queue: false,
+              matchTime: 0,
             });
 
             await updateDoc(userTwoDoc, {
@@ -53,6 +62,7 @@ function App() {
               opponent: userOne,
               matched: true,
               queue: false,
+              matchTime: 0,
             });
             const userOneQueueDoc = doc(db, "queueList", userOne);
             const userTwoQueueDoc = doc(db, "queueList", userTwo);
@@ -62,6 +72,7 @@ function App() {
         } catch (err) {
           console.error(err);
         }
+        return () => unsub();
       };
       checkCount();
     }

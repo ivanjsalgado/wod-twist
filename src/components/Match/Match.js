@@ -1,5 +1,5 @@
 import "./Match.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import { db } from "../../firebase-config";
 import {
@@ -14,7 +14,7 @@ import {
 const Modal = ({ data }) => {
   const loggedInUser = localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
-  const [movement, setMovement] = useState("pullups");
+  const [movement, setMovement] = useState("Pull-ups");
   const checkSubmission = data.movement && data.movement !== "";
   const [movementSubmitted, setMovementSubmitted] = useState(
     checkSubmission ? true : false
@@ -31,7 +31,9 @@ const Modal = ({ data }) => {
         const userDoc = doc(db, "users", loggedInUser);
         const matchDoc = doc(db, "matches", data.match);
         await updateDoc(userDoc, { movement: movement });
-        await updateDoc(matchDoc, { [loggedInUser]: true });
+        await updateDoc(matchDoc, {
+          [`${loggedInUser}.userSelected`]: true,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -92,11 +94,11 @@ const Modal = ({ data }) => {
                     onChange={handleChange}
                     value={movement}
                   >
-                    <option value="pullups">Pull-ups</option>
-                    <option value="pushups">Push-ups</option>
-                    <option value="running">Running</option>
-                    <option value="situps">Sit-ups</option>
-                    <option value="airsquats">Air Squats</option>
+                    <option value="Pull-ups">Pull-ups</option>
+                    <option value="Push-ups">Push-ups</option>
+                    <option value="Run">Run</option>
+                    <option value="Sit-ups">Sit-ups</option>
+                    <option value="Air Squats">Air Squats</option>
                   </select>
                   <button type="submit" className="btn">
                     Submit Movement
