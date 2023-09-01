@@ -11,8 +11,9 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-const Modal = ({ data }) => {
-  const loggedInUser = localStorage.getItem("user");
+const Match = ({ data }) => {
+  const loggedInUser =
+    sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
   const [movement, setMovement] = useState("Pull-ups");
   const checkSubmission = data.movement && data.movement !== "";
@@ -113,4 +114,4 @@ const Modal = ({ data }) => {
   );
 };
 
-export default Modal;
+export default Match;

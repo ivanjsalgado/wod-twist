@@ -19,11 +19,10 @@ const Login = () => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         let user = userCredential.user.uid;
+        sessionStorage.setItem("user", user);
         localStorage.setItem("user", user);
-        // navigate(`/home`, { state: user });
-        navigate(`/home`);
+        navigate("/home");
       })
       .catch((error) => {
         alert("Invalid user email and/or password");

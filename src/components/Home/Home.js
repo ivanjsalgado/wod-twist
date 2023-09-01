@@ -20,9 +20,11 @@ import Match from "../Match/Match";
 import Leaderboard from "../../assets/images/Adobe_test.svg";
 import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 export default function Home() {
-  const loggedInUser = localStorage.getItem("user");
+  const loggedInUser =
+    sessionStorage.getItem("user") || localStorage.getItem("user");
   const navigate = useNavigate();
   const [user, setUser] = useState(loggedInUser);
   const [userData, setUserData] = useState(null);
@@ -30,6 +32,7 @@ export default function Home() {
   const [matchTime, setMatchTime] = useState(0);
   const conditionUser = userData === null ? true : false;
   const [queued, setQueued] = useState(false);
+  const [render, setRender] = useState(false);
 
   const leaderboardClick = () => {
     navigate("/leaderboard");
@@ -41,19 +44,26 @@ export default function Home() {
 
   const queueClick = () => {
     if (userData.matched) return;
+    setQueued(!queued);
     const updateQueue = async () => {
       const changeQueue = !userData.queue;
       setUserData({ ...userData, queue: changeQueue });
       const queueDoc = doc(db, "users", user);
       await updateDoc(queueDoc, { queue: changeQueue });
       try {
-        setQueued(true);
+        setQueued(!queued);
       } catch (error) {
         console.log(error);
       }
     };
     updateQueue();
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {}, 1000);
+    setRender(!render);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!userData) return;
@@ -140,6 +150,8 @@ export default function Home() {
               return workout[opponentMovement] && workout[userData.movement];
             });
             const index = Math.floor(Math.random() * viableWorkouts.length);
+            console.log(viableWorkouts, "before ID");
+            console.log(viableWorkouts[0].id, "id in 0 index");
             const randomWorkoutID = viableWorkouts[index].id;
             const userRef = doc(db, "users", loggedInUser);
             await updateDoc(userRef, { workoutID: randomWorkoutID });
@@ -197,7 +209,6 @@ export default function Home() {
         } catch (error) {
           console.log(error);
         }
-        // return () => unsub();
       };
       readyForWorkout();
     });
@@ -234,9 +245,7 @@ export default function Home() {
         />
         <img
           onClick={queueClick}
-          className={
-            userData.queue ? "home__footer-btn-active" : "home__footer-btn"
-          }
+          className={queued ? "home__footer-btn-active" : "home__footer-btn"}
           src={MatchIcon}
           alt="History Icon"
         />
