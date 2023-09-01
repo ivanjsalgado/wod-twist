@@ -1,15 +1,71 @@
 import "./Modal.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase-config";
+import {
+  getDocs,
+  getDoc,
+  doc,
+  update,
+  updateDoc,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  collection,
+} from "firebase/firestore";
 
 const Modal = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
-  const [minutes, setMinutes] = useState(null);
-  const [seconds, setSeconds] = useState(null);
-  if (data.matched === false || data.movement === "") {
-    return <></>;
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [rounds, setRounds] = useState(0);
+  const [movements, setMovements] = useState([]);
+  const [repetitions, setRepetitions] = useState([]);
+  const loggedInUser = localStorage.getItem("user");
+  const [userData, setUserData] = useState(data);
+  const [timeSubmitted, setTimeSubmitted] = useState(false);
+
+  useEffect(() => {
+    const getWorkout = async () => {
+      const fetchWorkout = await getDoc(doc(db, "workouts", data.workoutID));
+      const workout = fetchWorkout.data();
+      if (workout.hasOwnProperty("Rounds")) {
+        setRounds(workout["Rounds"]);
+        delete workout["Rounds"];
+      }
+      setMovements(Object.keys(workout));
+      setRepetitions(Object.values(workout));
+    };
+    getWorkout();
+  }, []);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const matchDoc = doc(db, "matches", data.match);
+    const userDoc = doc(db, "users", loggedInUser);
+    setTimeSubmitted(true);
+    try {
+      await updateDoc(matchDoc, {
+        [`${loggedInUser}.userTime`]: minutes * 60 + seconds,
+        [`${loggedInUser}.movements`]: movements,
+        [`${loggedInUser}.repetitions`]: repetitions,
+        [`${data.opponent}.opponentTime`]: minutes * 60 + seconds,
+      });
+      await updateDoc(userDoc, {
+        matchTime: Number(minutes * 60 + seconds),
+      });
+      setUserData((prevState) => ({
+        ...prevState,
+        matchTime: Number(minutes * 60 + seconds),
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (movements === []) {
+    return <div>Loading...</div>;
   }
 
-  const submit = () => {};
   return (
     <div>
       <button className="btn" onClick={() => setShowModal(true)}>
@@ -28,31 +84,52 @@ const Modal = ({ data }) => {
             </div>
             <h1 className="modal__heading">Workout</h1>
             <div className="modal__content">
-              <p className="modal__sub-heading">For Time:</p>
-              <p className="modal__rounds">X rounds for time of:</p>
-              <p className="modal__movement">5 pull - ups</p>
-              <p className="modal__movement">10 push - ups</p>
-              <p className="modal__movement">15 Air Squats</p>
+              {rounds !== 0 ? (
+                <p className="modal__rounds">{rounds} rounds for time of:</p>
+              ) : (
+                <p className="modal__sub-heading">For Time:</p>
+              )}
+              <div>
+                {movements.map((movement, index) => {
+                  return (
+                    <p key={index} className="modal__movement">
+                      {movement}: {repetitions[index]}
+                    </p>
+                  );
+                })}
+              </div>
             </div>
-            <form className="modal__form" onSubmit={submit}>
-              <label className="modal__label">Minutes</label>
-              <input
-                className="modal__form-input"
-                type="number"
-                placeholder="Minutes"
-                value={minutes}
-                onChange={(e) => setMinutes(e.target.value)}
-              />
-              <label className="modal__label">Seconds</label>
-              <input
-                className="modal__form-input"
-                type="number"
-                placeholder="Seconds"
-                value={seconds}
-                onChange={(e) => setMinutes(e.target.value)}
-              />
-              <button className="btn">Submit Time</button>
-            </form>
+            {data.matchTime !== 0 || timeSubmitted ? (
+              <p>Time has been submitted</p>
+            ) : (
+              <form className="modal__form" onSubmit={submit}>
+                <div className="modal__form-container">
+                  <div className="modal__form-minutes">
+                    <label className="modal__label">Minutes</label>
+                    <input
+                      className="modal__form-input"
+                      type="number"
+                      placeholder="Minutes"
+                      value={minutes}
+                      onChange={(e) => setMinutes(e.target.value)}
+                    />
+                  </div>
+                  <div className="modal__form-seconds">
+                    <label className="modal__label">Seconds</label>
+                    <input
+                      className="modal__form-input"
+                      type="number"
+                      placeholder="Seconds"
+                      value={seconds}
+                      onChange={(e) => setSeconds(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="modal__form-btn">
+                  <button className="btn">Submit Time</button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       ) : null}
