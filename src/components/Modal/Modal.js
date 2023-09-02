@@ -13,6 +13,7 @@ const Modal = ({ data }) => {
   const loggedInUser = localStorage.getItem("user");
   const [userData, setUserData] = useState(data);
   const [timeSubmitted, setTimeSubmitted] = useState(false);
+  console.log(minutes, "minutes", seconds, "seconds");
 
   useEffect(() => {
     const getWorkout = async () => {
@@ -39,15 +40,14 @@ const Modal = ({ data }) => {
     setTimeSubmitted(true);
 
     try {
-      const userTimeInSeconds = minutes * 60 + seconds;
-      const opponentTimeInSeconds = minutes * 60 + seconds;
+      const userTimeInSeconds = Number(minutes * 60) + Number(seconds);
 
       await Promise.all([
         updateDoc(matchDoc, {
           [`${loggedInUser}.userTime`]: userTimeInSeconds,
           [`${loggedInUser}.movements`]: movements,
           [`${loggedInUser}.repetitions`]: repetitions,
-          [`${data.opponent}.opponentTime`]: opponentTimeInSeconds,
+          [`${data.opponent}.opponentTime`]: userTimeInSeconds,
         }),
         updateDoc(userDoc, {
           matchTime: userTimeInSeconds,

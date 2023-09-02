@@ -36,7 +36,7 @@
     width: fit-content;
     border: 1px solid #000;
     border-radius: 15px;
-    padding: 5px 7px;
+    padding: 1.25vw 1.75vw;
     background-color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
@@ -47,9 +47,6 @@
     padding-bottom: 1rem;
   }
 
-  &__content {
-  }
-
   &__sub-heading {
     padding-bottom: 0.5rem;
   }
@@ -58,18 +55,22 @@
     padding-bottom: 0.5rem;
   }
 
+  &__movement {
+    margin-bottom: 0.5rem;
+  }
+
   &__form {
     display: flex;
     flex-direction: column;
     padding-top: 0.5rem;
   }
 
-  &__form-minutes {
+  &__form-container {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
   }
 
-  &__form-seconds {
+  &__form-minutes {
     display: flex;
     flex-direction: column;
   }
@@ -83,14 +84,11 @@
     width: 30vw;
   }
 
-  &__movement {
-    margin-bottom: 0.5rem;
+  &__form-seconds {
+    display: flex;
+    flex-direction: column;
   }
 
-  &__form-container {
-    display: flex;
-    justify-content: space-between;
-  }
   &__form-btn {
     display: flex;
     justify-content: center;

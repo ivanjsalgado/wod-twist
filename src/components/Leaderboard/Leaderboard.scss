@@ -1,5 +1,6 @@
 .leaderboard {
   margin-top: 5rem;
+
   &__header {
     position: fixed;
     top: 0;
@@ -23,8 +24,8 @@
   }
 
   &__photo {
-    width: 38px;
-    height: 38px;
+    width: 9.5vw;
+    height: 9.5vw;
     border-radius: 50%;
   }
 }
