@@ -132,6 +132,7 @@ export default function Home() {
             const opponentRef = doc(db, "users", userData.opponent);
             const getOpponentMovement = await getDoc(opponentRef);
             const opponentMovement = getOpponentMovement.data().movement;
+            const opponentName = getOpponentMovement.data().name;
             const workoutsRef = collection(db, "workouts");
             const workoutsSnapshot = await getDocs(workoutsRef);
             const workouts = workoutsSnapshot.docs.map((workoutDoc) => ({
@@ -147,8 +148,14 @@ export default function Home() {
 
             const userRef = doc(db, "users", loggedInUser);
             await Promise.all([
-              updateDoc(userRef, { workoutID: randomWorkoutID }),
-              updateDoc(opponentRef, { workoutID: randomWorkoutID }),
+              updateDoc(userRef, {
+                workoutID: randomWorkoutID,
+                opponentName: opponentName,
+              }),
+              updateDoc(opponentRef, {
+                workoutID: randomWorkoutID,
+                opponentName: userData.name,
+              }),
               updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
           }
@@ -162,16 +169,16 @@ export default function Home() {
             let points = 0;
 
             if (
-              movementsData[loggedInUser].userTime >
-              movementsData[loggedInUser].opponentTime
-            ) {
-              result = "Lose";
-              points = -20;
-            } else if (
               movementsData[loggedInUser].userTime <
               movementsData[loggedInUser].opponentTime
             ) {
-              result = "Win";
+              result = "Victory";
+              points = -20;
+            } else if (
+              movementsData[loggedInUser].userTime >
+              movementsData[loggedInUser].opponentTime
+            ) {
+              result = "Defeat";
               points = 20;
             } else {
               result = "Tie";
@@ -193,6 +200,11 @@ export default function Home() {
                   movements: movementsData[loggedInUser].movements,
                   repetitions: movementsData[loggedInUser].repetitions,
                   workoutID: userData.workoutID,
+                  time: Number(movementsData[loggedInUser].userTime),
+                  opponentTime: Number(
+                    movementsData[loggedInUser].opponentTime
+                  ),
+                  opponentName: userData.opponentName,
                   result,
                 }),
               }),
@@ -230,7 +242,7 @@ export default function Home() {
         {userData.workoutID !== "" ? <Modal data={userData} /> : <></>}
       </div>
       <div className="home__graph">
-        <BarGraph />
+        <BarGraph history={userData.history} />
       </div>
       <div className="home__bot-container">
         <img

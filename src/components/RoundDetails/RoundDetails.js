@@ -1,39 +1,60 @@
 import "./RoundDetails.scss";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
-import { useState } from "react";
+import Workout from "../Workout/Workout";
 
-function RoundDetails() {
-  const loggedInUser = localStorage.getItem("user");
-  const [user, setUser] = useState(loggedInUser);
+function RoundDetails({
+  result,
+  opponentTime,
+  time,
+  name,
+  opponentName,
+  workoutID,
+}) {
+  let minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+  let opponentMinutes = Math.floor(opponentTime / 60);
+  let opponentSeconds = opponentTime % 60;
+
+  function minTwoDigits(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
 
   return (
     <div className="round">
-      <div className="round__container-one">
-        <div className="round__userOne round__userOne--green">
+      <div
+        className={
+          result === "Victory" || result === "Tie"
+            ? "round__container-win"
+            : "round__container-lose"
+        }
+      >
+        <div className="round__user">
           <img
             className="round__picture"
             src={ProfilePic}
             alt="User One Profile"
           />
-          <h2 className="round__userName">Ivan</h2>
-          <p>9:36</p>
+          <h2 className="round__userName">{name}</h2>
+          <p>
+            {minTwoDigits(minutes)}:{minTwoDigits(seconds)}
+          </p>
         </div>
         <div className="round__result-container">
           <div className="round__wl-container">
-            <h1 className="round__result">W</h1>
-            <h1 className="round__result round__result--margin">-</h1>
-            <h1 className="round__result">L</h1>
+            <h1 className="round__result">{result}</h1>
           </div>
-          <button className="round__btn">See Workout</button>
+          <Workout workoutID={workoutID} />
         </div>
-        <div className="round__userTwo round__userTwo--mercury">
+        <div className="round__user">
           <img
             className="round__picture"
             src={ProfilePic}
             alt="User Two Profile"
           />
-          <h2 className="round__userName">Ivan</h2>
-          <p>9:33</p>
+          <h2 className="round__userName">{opponentName}</h2>
+          <p>
+            {minTwoDigits(opponentMinutes)}:{minTwoDigits(opponentSeconds)}
+          </p>
         </div>
       </div>
     </div>

@@ -9,22 +9,22 @@
 
   &__profile {
     display: flex;
-    height: 50px;
-    width: 50px;
+    height: 12.5vw;
+    width: 12.5vw;
     border-radius: 50%;
   }
 
   &__logo {
     display: flex;
-    height: 75px;
-    width: 150px;
+    height: 18.75vw;
+    width: 37.5vw;
     background-image: url("../../assets/images/IMG-5638.PNG");
   }
 
   &__hamburger {
     display: flex;
-    height: 50px;
-    width: 50px;
+    height: 12.5vw;
+    width: 12.5vw;
     background-image: url("../../assets/icons/noun-setting-4951792.svg");
     background-repeat: no-repeat;
   }

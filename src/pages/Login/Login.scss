@@ -30,8 +30,8 @@
   }
 
   &__logo {
-    width: 250px;
-    height: 125px;
+    width: 62.5vw;
+    height: 31.25vw;
   }
 
   &__form {
@@ -65,6 +65,7 @@
     justify-content: flex-end;
     padding-bottom: 1rem;
   }
+
   &__small-text {
     color: $white;
     font-size: 0.75rem;
@@ -147,10 +148,5 @@
       box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25),
         0 0 0 3px #c8dafc;
     }
-  }
-
-  &__facebook {
-    // width: 40vw;
-    padding: 1rem;
   }
 }

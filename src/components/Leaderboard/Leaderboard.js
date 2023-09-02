@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 
 function Leaderboard() {
-  const loggedInUser = localStorage.getItem("user");
-  const [user, setUser] = useState(loggedInUser);
   const [userList, setUserList] = useState([]);
   const userCollectionRef = collection(db, "users");
 
@@ -31,10 +29,9 @@ function Leaderboard() {
 
   useEffect(() => {
     getUserList();
-    console.log(userList);
   }, []);
 
-  if (userList === []) {
+  if (userList.length === 0) {
     return <div>Loading...</div>;
   }
 
