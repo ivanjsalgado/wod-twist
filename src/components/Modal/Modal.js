@@ -1,17 +1,7 @@
 import "./Modal.scss";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
-import {
-  getDocs,
-  getDoc,
-  doc,
-  update,
-  updateDoc,
-  setDoc,
-  deleteDoc,
-  onSnapshot,
-  collection,
-} from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 
 const Modal = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
@@ -28,10 +18,12 @@ const Modal = ({ data }) => {
     const getWorkout = async () => {
       const fetchWorkout = await getDoc(doc(db, "workouts", data.workoutID));
       const workout = fetchWorkout.data();
+
       if (workout.hasOwnProperty("Rounds")) {
         setRounds(workout["Rounds"]);
         delete workout["Rounds"];
       }
+
       setMovements(Object.keys(workout));
       setRepetitions(Object.values(workout));
     };
@@ -40,29 +32,38 @@ const Modal = ({ data }) => {
 
   const submit = async (e) => {
     e.preventDefault();
+
     const matchDoc = doc(db, "matches", data.match);
     const userDoc = doc(db, "users", loggedInUser);
+
     setTimeSubmitted(true);
+
     try {
-      await updateDoc(matchDoc, {
-        [`${loggedInUser}.userTime`]: minutes * 60 + seconds,
-        [`${loggedInUser}.movements`]: movements,
-        [`${loggedInUser}.repetitions`]: repetitions,
-        [`${data.opponent}.opponentTime`]: minutes * 60 + seconds,
-      });
-      await updateDoc(userDoc, {
-        matchTime: Number(minutes * 60 + seconds),
-      });
+      const userTimeInSeconds = minutes * 60 + seconds;
+      const opponentTimeInSeconds = minutes * 60 + seconds;
+
+      await Promise.all([
+        updateDoc(matchDoc, {
+          [`${loggedInUser}.userTime`]: userTimeInSeconds,
+          [`${loggedInUser}.movements`]: movements,
+          [`${loggedInUser}.repetitions`]: repetitions,
+          [`${data.opponent}.opponentTime`]: opponentTimeInSeconds,
+        }),
+        updateDoc(userDoc, {
+          matchTime: userTimeInSeconds,
+        }),
+      ]);
+
       setUserData((prevState) => ({
         ...prevState,
-        matchTime: Number(minutes * 60 + seconds),
+        matchTime: userTimeInSeconds,
       }));
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (movements === []) {
+  if (movements.length === 0) {
     return <div>Loading...</div>;
   }
 

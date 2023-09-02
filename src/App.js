@@ -1,5 +1,4 @@
 import "./App.scss";
-import firebase from "firebase/app";
 import "firebase/firestore";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login";
@@ -19,61 +18,66 @@ import {
 } from "firebase/firestore";
 
 function App() {
+  const startMatchmaking = async () => {
+    try {
+      const queueSnapshot = await getDocs(collection(db, "queueList"));
+      const queuedUsers = queueSnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((user) => user.queue === true);
+
+      while (queuedUsers.length > 1) {
+        const [userOne, userTwo] = queuedUsers.splice(0, 2);
+        const matchData = {
+          userSelected: false,
+          opponentTime: 0,
+          userTime: 0,
+          movements: [],
+          repetitions: [],
+          retrievedResult: false,
+        };
+
+        const matchID = userOne.id + userTwo.id;
+        const matchDocRef = doc(db, "matches", matchID);
+        const userOneDocRef = doc(db, "users", userOne.id);
+        const userTwoDocRef = doc(db, "users", userTwo.id);
+        const userOneQueueDocRef = doc(db, "queueList", userOne.id);
+        const userTwoQueueDocRef = doc(db, "queueList", userTwo.id);
+
+        await setDoc(matchDocRef, {
+          [userOne.id]: matchData,
+          [userTwo.id]: matchData,
+        });
+
+        await Promise.all([
+          updateDoc(userOneDocRef, {
+            matched: true,
+            opponent: userTwo.id,
+            match: matchID,
+            queue: false,
+            matchTime: 0,
+          }),
+
+          updateDoc(userTwoDocRef, {
+            matched: true,
+            opponent: userOne.id,
+            match: matchID,
+            queue: false,
+            matchTime: 0,
+          }),
+
+          deleteDoc(userOneQueueDocRef),
+          deleteDoc(userTwoQueueDocRef),
+        ]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const unsub = onSnapshot(
     doc(db, "queueList", "documents"),
     (individualDocument) => {
-      const checkCount = async () => {
-        try {
-          const data = await getDocs(collection(db, "queueList"));
-          const filteredData = data.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          let test = filteredData.filter((item) => item.queue === true);
-          while (test.length > 1) {
-            const userOne = test[0].id;
-            const userTwo = test[1].id;
-            test.splice(0, 2);
-            const matchData = {
-              userSelected: false,
-              opponentTime: 0,
-              userTime: 0,
-              movements: [],
-              repetitions: [],
-              retrievedResult: false,
-            };
-            // I had to sum the ids because it would create multiple matches otherwise
-            setDoc(doc(db, "matches", userOne + userTwo), {
-              [userOne]: matchData,
-              [userTwo]: matchData,
-            });
-            const userOneDoc = doc(db, "users", userOne);
-            const userTwoDoc = doc(db, "users", userTwo);
-            await updateDoc(userOneDoc, {
-              matched: true,
-              opponent: userTwo,
-              match: userOne + userTwo,
-              queue: false,
-              matchTime: 0,
-            });
-
-            await updateDoc(userTwoDoc, {
-              match: userOne + userTwo,
-              opponent: userOne,
-              matched: true,
-              queue: false,
-              matchTime: 0,
-            });
-            const userOneQueueDoc = doc(db, "queueList", userOne);
-            const userTwoQueueDoc = doc(db, "queueList", userTwo);
-            await deleteDoc(userOneQueueDoc);
-            await deleteDoc(userTwoQueueDoc);
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      checkCount();
+      startMatchmaking();
     }
   );
 
