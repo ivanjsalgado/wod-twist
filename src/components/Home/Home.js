@@ -29,6 +29,8 @@ export default function Home() {
   const [matchID, setMatchID] = useState("");
   const isUserLoading = userData === null;
   const [queued, setQueued] = useState(false);
+  const [matched, setMatched] = useState(false);
+  console.log(matched);
 
   const leaderboardClick = () => {
     navigate("/leaderboard");
@@ -53,8 +55,13 @@ export default function Home() {
     }
   };
 
+  // Testing re-rendering
   useEffect(() => {
-    if (!queued) return;
+    console.log(userData);
+  }, [userData]);
+
+  useEffect(() => {
+    // if (!queued) return;
 
     const queueRef = doc(db, "queueList", "documents");
 
@@ -76,7 +83,7 @@ export default function Home() {
       }
     };
 
-    if (userData.queue) {
+    if (queued) {
       updateQueue("add");
     } else {
       updateQueue("delete");
@@ -93,6 +100,7 @@ export default function Home() {
         setUserData(data);
         setMatchID(data.match);
         setQueued(data.queue);
+        setMatched(data.matched);
         console.log(userData);
       } else {
         console.log("User was not found");
@@ -144,7 +152,9 @@ export default function Home() {
                 workout[opponentMovement] && workout[userData.movement]
             );
             const index = Math.floor(Math.random() * viableWorkouts.length);
+            console.log(viableWorkouts[0]);
             const randomWorkoutID = viableWorkouts[index].id;
+            console.log(randomWorkoutID);
 
             const userRef = doc(db, "users", loggedInUser);
             await Promise.all([
@@ -222,6 +232,72 @@ export default function Home() {
     );
   }, [matchID]);
 
+  const startMatchmaking = async () => {
+    try {
+      const queueSnapshot = await getDocs(collection(db, "queueList"));
+      const queuedUsers = queueSnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((user) => user.queue === true);
+
+      while (queuedUsers.length > 1) {
+        console.log("Once match has been found");
+        setMatched(true);
+        setQueued(false);
+        const [userOne, userTwo] = queuedUsers.splice(0, 2);
+        const matchData = {
+          userSelected: false,
+          opponentTime: 0,
+          userTime: 0,
+          movements: [],
+          repetitions: [],
+          retrievedResult: false,
+        };
+        const matchID = userOne.id + userTwo.id;
+        const matchDocRef = doc(db, "matches", matchID);
+        const userOneDocRef = doc(db, "users", userOne.id);
+        const userTwoDocRef = doc(db, "users", userTwo.id);
+        const userOneQueueDocRef = doc(db, "queueList", userOne.id);
+        const userTwoQueueDocRef = doc(db, "queueList", userTwo.id);
+
+        await setDoc(matchDocRef, {
+          [userOne.id]: matchData,
+          [userTwo.id]: matchData,
+        });
+
+        await Promise.all([
+          updateDoc(userOneDocRef, {
+            matched: true,
+            opponent: userTwo.id,
+            match: matchID,
+            queue: false,
+            matchTime: 0,
+          }),
+
+          updateDoc(userTwoDocRef, {
+            matched: true,
+            opponent: userOne.id,
+            match: matchID,
+            queue: false,
+            matchTime: 0,
+          }),
+
+          deleteDoc(userOneQueueDocRef),
+          deleteDoc(userTwoQueueDocRef),
+        ]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const unsub = onSnapshot(
+    doc(db, "queueList", "documents"),
+    (individualDocument) => {
+      startMatchmaking();
+      console.log("Match is outside of if statement");
+    }
+  );
+
   if (isUserLoading) {
     return <div>Loading...</div>;
   }
@@ -234,11 +310,7 @@ export default function Home() {
         <p className="home__time">99:99:99</p>
       </div>
       <div className="home__workout-container">
-        {userData.matched && userData.workoutID === "" ? (
-          <Match data={userData} />
-        ) : (
-          <></>
-        )}
+        {matched && userData.workoutID === "" ? <Match /> : <></>}
         {userData.workoutID !== "" ? <Modal data={userData} /> : <></>}
       </div>
       <div className="home__graph">
@@ -253,9 +325,7 @@ export default function Home() {
         />
         <img
           onClick={handleQueueClick}
-          className={
-            userData.queue ? "home__footer-btn-active" : "home__footer-btn"
-          }
+          className={queued ? "home__footer-btn-active" : "home__footer-btn"}
           src={MatchIcon}
           alt="History Icon"
         />

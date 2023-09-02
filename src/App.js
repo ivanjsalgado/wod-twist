@@ -35,7 +35,6 @@ function App() {
           repetitions: [],
           retrievedResult: false,
         };
-
         const matchID = userOne.id + userTwo.id;
         const matchDocRef = doc(db, "matches", matchID);
         const userOneDocRef = doc(db, "users", userOne.id);

@@ -13,7 +13,6 @@ const Modal = ({ data }) => {
   const loggedInUser = localStorage.getItem("user");
   const [userData, setUserData] = useState(data);
   const [timeSubmitted, setTimeSubmitted] = useState(false);
-  console.log(minutes, "minutes", seconds, "seconds");
 
   useEffect(() => {
     const getWorkout = async () => {

@@ -76,8 +76,11 @@ function BarGraph({ history }) {
           display: true,
           text: "Matches",
         },
+        ticks: {
+          precision: 0,
+        },
         min: 0,
-        max: history.length * 2,
+        max: history.length,
       },
       x: {
         title: {

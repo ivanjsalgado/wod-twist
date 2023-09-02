@@ -1,15 +1,36 @@
 import "./Match.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import { db } from "../../firebase-config";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 
-const Match = ({ data }) => {
+const Match = () => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
-  const [movement, setMovement] = useState(data.movement || "Pull-ups");
-  const [movementSubmitted, setMovementSubmitted] = useState(!!data.movement);
+  const [userData, setUserData] = useState(null);
+  const [movement, setMovement] = useState("Pull-ups");
+  const [movementSubmitted, setMovementSubmitted] = useState(false);
+
+  const getUserData = async () => {
+    try {
+      const userDoc = doc(db, "users", loggedInUser);
+      const snap = await getDoc(userDoc);
+
+      if (snap.exists()) {
+        const data = snap.data();
+        setUserData(data);
+      } else {
+        console.log("User was not found");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const handleChange = (e) => {
     setMovement(e.target.value);
@@ -20,7 +41,7 @@ const Match = ({ data }) => {
 
     try {
       const userDoc = doc(db, "users", loggedInUser);
-      const matchDoc = doc(db, "matches", data.match);
+      const matchDoc = doc(db, "matches", userData.match);
 
       await Promise.all([
         updateDoc(userDoc, { movement: movement }),
@@ -32,6 +53,10 @@ const Match = ({ data }) => {
       console.log(error);
     }
   };
+
+  if (userData === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -66,7 +91,7 @@ const Match = ({ data }) => {
               {movementSubmitted ? (
                 <div>
                   <p className="match__submitted">
-                    Movement Submitted: {data.movement}
+                    Movement Submitted: {userData.movement}
                   </p>
                   <p className="match__submitted">
                     Waiting for Opponent's Selection
