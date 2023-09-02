@@ -22,13 +22,12 @@ import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
 
 export default function Home() {
-  const loggedInUser = localStorage.getItem("user");
+  const loggedInUser =
+    sessionStorage.getItem("user") || localStorage.getItem("user");
   const navigate = useNavigate();
-  const [user, setUser] = useState(loggedInUser);
   const [userData, setUserData] = useState(null);
   const [matchID, setMatchID] = useState("");
-  const [matchTime, setMatchTime] = useState(0);
-  const conditionUser = userData === null ? true : false;
+  const isUserLoading = userData === null;
   const [queued, setQueued] = useState(false);
 
   const leaderboardClick = () => {
@@ -39,122 +38,129 @@ export default function Home() {
     navigate("/history");
   };
 
-  const queueClick = () => {
+  const handleQueueClick = async () => {
     if (userData.matched) return;
-    const updateQueue = async () => {
+
+    try {
       const changeQueue = !userData.queue;
+      // Need for the button to turn green when queueing
       setUserData({ ...userData, queue: changeQueue });
-      const queueDoc = doc(db, "users", user);
+      const queueDoc = doc(db, "users", loggedInUser);
       await updateDoc(queueDoc, { queue: changeQueue });
+      setQueued(changeQueue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!queued) return;
+
+    const queueRef = doc(db, "queueList", "documents");
+
+    const updateQueue = async (action) => {
       try {
-        setQueued(true);
+        const queueSnap = await getDoc(queueRef);
+        const documents = queueSnap.data().entries;
+        const queueDoc = doc(db, "queueList", loggedInUser);
+
+        if (action === "add") {
+          await setDoc(queueDoc, { queue: userData.queue });
+          await updateDoc(queueRef, { entries: documents + 1 });
+        } else if (action === "delete") {
+          await deleteDoc(queueDoc);
+          await updateDoc(queueRef, { entries: documents - 1 });
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    updateQueue();
+
+    if (userData.queue) {
+      updateQueue("add");
+    } else {
+      updateQueue("delete");
+    }
+  }, [queued]);
+
+  const getUserData = async () => {
+    try {
+      const userDoc = doc(db, "users", loggedInUser);
+      const snap = await getDoc(userDoc);
+
+      if (snap.exists()) {
+        const data = snap.data();
+        setUserData(data);
+        setMatchID(data.match);
+        setQueued(data.queue);
+        console.log(userData);
+      } else {
+        console.log("User was not found");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    if (!userData) return;
-    if (userData.queue) {
-      const addQueue = async () => {
-        const queueRef = doc(db, "queueList", "documents");
-        const queueSnap = await getDoc(queueRef);
-        const documents = queueSnap.data().entries;
-        try {
-          const queueDoc = doc(db, "queueList", user);
-          await setDoc(queueDoc, { queue: userData.queue });
-          await updateDoc(queueRef, { entries: documents + 1 });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      addQueue();
-    } else {
-      const deleteQueue = async () => {
-        const queueRef = doc(db, "queueList", "documents");
-        const queueSnap = await getDoc(queueRef);
-        const documents = queueSnap.data().entries;
-        try {
-          const queueDoc = doc(db, "queueList", user);
-          await deleteDoc(queueDoc);
-          await updateDoc(queueRef, { entries: documents - 1 });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      deleteQueue();
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    const getRandom = async () => {
-      try {
-        const snap = await getDoc(doc(db, "users", user));
-
-        if (snap.exists()) {
-          let data = snap.data();
-          setUserData(data);
-          setMatchID(data.match);
-          setMatchTime(data.matchTime);
-          console.log(userData);
-        } else {
-          console.log("No such document");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getRandom();
-  }, [conditionUser, queued]);
+    getUserData();
+  }, [loggedInUser]);
 
   useEffect(() => {
     if (matchID === "") return;
-    const unsub = onSnapshot(doc(db, "matches", matchID), (currentMatch) => {
-      const readyForWorkout = async () => {
+    const unsub = onSnapshot(
+      doc(db, "matches", matchID),
+      async (currentMatch) => {
         try {
           const matchRef = doc(db, "matches", matchID);
           const data = await getDoc(matchRef);
           const usersMatchData = data.data();
+
           const readyToGenerate =
-            usersMatchData[loggedInUser].userSelected === true &&
-            usersMatchData[userData.opponent].userSelected === true;
+            usersMatchData[loggedInUser].userSelected &&
+            usersMatchData[userData.opponent].userSelected;
+
           const readyToLog =
             usersMatchData[loggedInUser].userTime !== 0 &&
             usersMatchData[userData.opponent].userTime !== 0;
+
           const readyToDelete =
             usersMatchData[loggedInUser].retrievedResult &&
             usersMatchData[userData.opponent].retrievedResult;
+
           if (readyToGenerate) {
             const opponentRef = doc(db, "users", userData.opponent);
             const getOpponentMovement = await getDoc(opponentRef);
             const opponentMovement = getOpponentMovement.data().movement;
             const workoutsRef = collection(db, "workouts");
-            const workoutsData = await getDocs(workoutsRef);
-            const workouts = workoutsData.docs.map((workout) => ({
-              ...workout.data(),
-              id: workout.id,
+            const workoutsSnapshot = await getDocs(workoutsRef);
+            const workouts = workoutsSnapshot.docs.map((workoutDoc) => ({
+              ...workoutDoc.data(),
+              id: workoutDoc.id,
             }));
-            const viableWorkouts = workouts.filter((workout) => {
-              return workout[opponentMovement] && workout[userData.movement];
-            });
+            const viableWorkouts = workouts.filter(
+              (workout) =>
+                workout[opponentMovement] && workout[userData.movement]
+            );
             const index = Math.floor(Math.random() * viableWorkouts.length);
             const randomWorkoutID = viableWorkouts[index].id;
+
             const userRef = doc(db, "users", loggedInUser);
-            await updateDoc(userRef, { workoutID: randomWorkoutID });
-            await updateDoc(opponentRef, { workoutID: randomWorkoutID });
-            await updateDoc(matchRef, {
-              [`${loggedInUser}.userSelected`]: false,
-            });
+            await Promise.all([
+              updateDoc(userRef, { workoutID: randomWorkoutID }),
+              updateDoc(opponentRef, { workoutID: randomWorkoutID }),
+              updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
+            ]);
           }
+
           if (readyToLog) {
             const userRefAgain = doc(db, "users", loggedInUser);
             const matchRefAgain = doc(db, "matches", matchID);
             const fetchedMovements = await getDoc(matchRefAgain);
             const movementsData = fetchedMovements.data();
             let result = "";
-            let points;
+            let points = 0;
+
             if (
               movementsData[loggedInUser].userTime >
               movementsData[loggedInUser].opponentTime
@@ -169,27 +175,30 @@ export default function Home() {
               points = 20;
             } else {
               result = "Tie";
-              points = 0;
             }
-            await updateDoc(matchRefAgain, {
-              [`${loggedInUser}.retrievedResult`]: true,
-            });
-            await updateDoc(userRefAgain, {
-              match: "",
-              matchTime: 0,
-              matched: false,
-              movement: "",
-              opponent: "",
-              workoutID: "",
-              points: userData.points + points,
-              history: arrayUnion({
-                movements: movementsData[loggedInUser].movements,
-                repetitions: movementsData[loggedInUser].repetitions,
-                workoutID: userData.workoutID,
-                result: result,
+
+            await Promise.all([
+              updateDoc(matchRefAgain, {
+                [`${loggedInUser}.retrievedResult`]: true,
               }),
-            });
+              updateDoc(userRefAgain, {
+                match: "",
+                matchTime: 0,
+                matched: false,
+                movement: "",
+                opponent: "",
+                workoutID: "",
+                points: userData.points + points,
+                history: arrayUnion({
+                  movements: movementsData[loggedInUser].movements,
+                  repetitions: movementsData[loggedInUser].repetitions,
+                  workoutID: userData.workoutID,
+                  result,
+                }),
+              }),
+            ]);
           }
+
           if (readyToDelete) {
             const deleteDocRef = doc(db, "matches", userData.match);
             await deleteDoc(deleteDocRef);
@@ -197,13 +206,11 @@ export default function Home() {
         } catch (error) {
           console.log(error);
         }
-        // return () => unsub();
-      };
-      readyForWorkout();
-    });
+      }
+    );
   }, [matchID]);
 
-  if (conditionUser) {
+  if (isUserLoading) {
     return <div>Loading...</div>;
   }
 
@@ -233,7 +240,7 @@ export default function Home() {
           alt="History Icon"
         />
         <img
-          onClick={queueClick}
+          onClick={handleQueueClick}
           className={
             userData.queue ? "home__footer-btn-active" : "home__footer-btn"
           }
