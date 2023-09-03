@@ -2,13 +2,14 @@ import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import "./Login.scss";
-import { googleProvider, auth } from "../../firebase-config";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/IMG-5638.PNG";
+import { db, auth } from "../../firebase-config";
+import { setDoc, doc } from "firebase/firestore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,18 +26,33 @@ const Login = () => {
         navigate("/home");
       })
       .catch((error) => {
+        console.log(error);
         alert("Invalid user email and/or password");
         return;
       });
   };
 
   const signInWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      navigate("/home");
-    } catch (err) {
-      console.log(err);
-    }
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        console.log(result, "result");
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        sessionStorage.setItem("user", user);
+        localStorage.setItem("user", user);
+
+        const userData = {
+          email: user.email,
+          photoURL: user.photoURL,
+        };
+
+        await setDoc(userRef, userData, { merge: true });
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // const logout = async () => {

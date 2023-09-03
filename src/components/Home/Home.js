@@ -24,13 +24,19 @@ import Modal from "../Modal/Modal";
 export default function Home() {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
+  const loggedDoc = collection(db, loggedInUser);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [matchID, setMatchID] = useState("");
   const isUserLoading = userData === null;
   const [queued, setQueued] = useState(false);
   const [matched, setMatched] = useState(false);
-  console.log(matched);
+  const [currentWorkoutID, setCurrentWorkoutID] = useState("");
+  const [selectedMovement, setSelectedMovement] = useState(false);
+
+  const updateDataFromMatch = (newData) => {
+    setSelectedMovement(true);
+  };
 
   const leaderboardClick = () => {
     navigate("/leaderboard");
@@ -55,14 +61,7 @@ export default function Home() {
     }
   };
 
-  // Testing re-rendering
   useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
-  useEffect(() => {
-    // if (!queued) return;
-
     const queueRef = doc(db, "queueList", "documents");
 
     const updateQueue = async (action) => {
@@ -101,6 +100,7 @@ export default function Home() {
         setMatchID(data.match);
         setQueued(data.queue);
         setMatched(data.matched);
+        setCurrentWorkoutID(data.workoutID);
         console.log(userData);
       } else {
         console.log("User was not found");
@@ -111,8 +111,13 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getUserData();
-  }, [loggedInUser]);
+    const unsubscribe = onSnapshot(loggedDoc, (userSnapshot) => {
+      getUserData();
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [loggedInUser, selectedMovement]);
 
   useEffect(() => {
     if (matchID === "") return;
@@ -168,6 +173,7 @@ export default function Home() {
               }),
               updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
+            setCurrentWorkoutID(randomWorkoutID);
           }
 
           if (readyToLog) {
@@ -252,8 +258,8 @@ export default function Home() {
           repetitions: [],
           retrievedResult: false,
         };
-        const matchID = userOne.id + userTwo.id;
-        const matchDocRef = doc(db, "matches", matchID);
+        const generatedMatchID = userOne.id + userTwo.id;
+        const matchDocRef = doc(db, "matches", generatedMatchID);
         const userOneDocRef = doc(db, "users", userOne.id);
         const userTwoDocRef = doc(db, "users", userTwo.id);
         const userOneQueueDocRef = doc(db, "queueList", userOne.id);
@@ -268,7 +274,7 @@ export default function Home() {
           updateDoc(userOneDocRef, {
             matched: true,
             opponent: userTwo.id,
-            match: matchID,
+            match: generatedMatchID,
             queue: false,
             matchTime: 0,
           }),
@@ -276,13 +282,14 @@ export default function Home() {
           updateDoc(userTwoDocRef, {
             matched: true,
             opponent: userOne.id,
-            match: matchID,
+            match: generatedMatchID,
             queue: false,
             matchTime: 0,
           }),
 
           deleteDoc(userOneQueueDocRef),
           deleteDoc(userTwoQueueDocRef),
+          setMatchID(generatedMatchID),
         ]);
       }
     } catch (err) {
@@ -310,8 +317,12 @@ export default function Home() {
         <p className="home__time">99:99:99</p>
       </div>
       <div className="home__workout-container">
-        {matched && userData.workoutID === "" ? <Match /> : <></>}
-        {userData.workoutID !== "" ? <Modal data={userData} /> : <></>}
+        {matched && currentWorkoutID === "" ? (
+          <Match updateDataFromMatch={updateDataFromMatch} matchID={matchID} />
+        ) : (
+          <></>
+        )}
+        {currentWorkoutID !== "" ? <Modal data={userData} /> : <></>}
       </div>
       <div className="home__graph">
         <BarGraph history={userData.history} />

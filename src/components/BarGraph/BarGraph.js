@@ -24,26 +24,33 @@ function BarGraph({ history }) {
   const lose = {};
   const winData = [];
   const loseData = [];
+  let labels = [];
 
-  history.forEach((match) => {
-    const movementsToCount = match.result === "Victory" ? win : lose;
+  const graph = () => {
+    history.forEach((match) => {
+      const movementsToCount = match.result === "Victory" ? win : lose;
 
-    match.movements.forEach((movement) => {
-      movementsToCount[movement] = (movementsToCount[movement] || 0) + 1;
+      match.movements.forEach((movement) => {
+        movementsToCount[movement] = (movementsToCount[movement] || 0) + 1;
+      });
     });
-  });
 
-  const allMovements = Object.keys(win).concat(Object.keys(lose)).sort();
-  const movements = [...new Set(allMovements)];
+    const allMovements = Object.keys(win).concat(Object.keys(lose)).sort();
+    const movements = [...new Set(allMovements)];
 
-  movements.map((movement) => {
-    win[movement] === undefined ? winData.push(0) : winData.push(win[movement]);
-    lose[movement] === undefined
-      ? loseData.push(0)
-      : loseData.push(lose[movement]);
-  });
+    movements.map((movement) => {
+      win[movement] === undefined
+        ? winData.push(0)
+        : winData.push(win[movement]);
+      lose[movement] === undefined
+        ? loseData.push(0)
+        : loseData.push(lose[movement]);
+    });
 
-  const labels = movements;
+    labels = movements;
+  };
+
+  graph();
 
   const data = {
     labels,

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { setDoc, doc } from "firebase/firestore";
 
 export default function SignUp() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,7 +26,20 @@ export default function SignUp() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const userID = userCredential.user.uid;
-        setDoc(doc(db, "users", userID), { email: email });
+        setDoc(doc(db, "users", userID), {
+          email: email,
+          name: name,
+          match: "",
+          matchTime: 0,
+          matched: false,
+          movement: "",
+          opponent: "",
+          opponentName: "",
+          points: 0,
+          queue: false,
+          workoutID: "",
+          history: [],
+        });
         alert("Account has been successfully created");
         navigate("/");
       })
@@ -42,6 +56,14 @@ export default function SignUp() {
           <h1 className="sign__heading-welcome">Sign Up</h1>
         </div>
         <form onSubmit={signUp} className="sign__form">
+          <label className="sign__label">Name</label>
+          <input
+            className="sign__form-input"
+            type="name"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <label className="sign__label">Email</label>
           <input
             className="sign__form-input"

@@ -4,33 +4,14 @@ import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering
 import { db } from "../../firebase-config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 
-const Match = () => {
+const Match = ({ matchID, updateDataFromMatch }) => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
-  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState(null);
   const [movement, setMovement] = useState("Pull-ups");
   const [movementSubmitted, setMovementSubmitted] = useState(false);
-
-  const getUserData = async () => {
-    try {
-      const userDoc = doc(db, "users", loggedInUser);
-      const snap = await getDoc(userDoc);
-
-      if (snap.exists()) {
-        const data = snap.data();
-        setUserData(data);
-      } else {
-        console.log("User was not found");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
+  const [matchData, setMatchData] = useState(true);
 
   const handleChange = (e) => {
     setMovement(e.target.value);
@@ -41,7 +22,7 @@ const Match = () => {
 
     try {
       const userDoc = doc(db, "users", loggedInUser);
-      const matchDoc = doc(db, "matches", userData.match);
+      const matchDoc = doc(db, "matches", matchID);
 
       await Promise.all([
         updateDoc(userDoc, { movement: movement }),
@@ -49,14 +30,11 @@ const Match = () => {
       ]);
 
       setMovementSubmitted(true);
+      updateDataFromMatch(matchData);
     } catch (error) {
       console.log(error);
     }
   };
-
-  if (userData === null) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
@@ -91,7 +69,7 @@ const Match = () => {
               {movementSubmitted ? (
                 <div>
                   <p className="match__submitted">
-                    Movement Submitted: {userData.movement}
+                    Movement Submitted: {movement}
                   </p>
                   <p className="match__submitted">
                     Waiting for Opponent's Selection

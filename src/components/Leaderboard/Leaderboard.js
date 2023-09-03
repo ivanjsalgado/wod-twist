@@ -18,10 +18,10 @@ function Leaderboard() {
         ...doc.data(),
         id: doc.id,
       }));
-      setUserList(userData);
-      userList.sort((a, b) => {
+      const sortUsers = userData.sort((a, b) => {
         return b.points - a.points;
       });
+      setUserList(sortUsers);
     } catch (err) {
       console.error(err);
     }
