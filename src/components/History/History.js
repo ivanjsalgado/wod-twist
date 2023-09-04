@@ -34,16 +34,18 @@ function History() {
   }
   return (
     <div className="history">
-      <Header />
-      {userData.history.map((round) => (
+      <Header photo={userData.photoURL} />
+      {userData.history.map((round, index) => (
         <RoundDetails
-          key={round.id} // Add a unique key prop to each RoundDetails component
+          index={index}
           workoutID={round.workoutID}
           result={round.result}
           opponentTime={round.opponentTime}
           time={round.time}
           name={userData.name}
           opponentName={round.opponentName}
+          opponentPhoto={round.opponentPhoto}
+          photo={userData.photoURL}
         />
       ))}
     </div>

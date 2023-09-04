@@ -1,10 +1,11 @@
+@use "../../styles/partials/typography" as *;
+
 .button {
-  width: 30vw;
+  color: #ffbf00;
   &__btn {
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
     font-size: 1rem;
-    border: 1px solid transparent;
+    margin-bottom: 0.5rem;
+    text-decoration: underline;
   }
 }
 
@@ -22,7 +23,7 @@
 
   &__container-content {
     width: 75vw;
-    background-color: #fff;
+    background-color: #353935;
     border-radius: 5px;
     padding: 1rem;
     display: flex;
@@ -37,10 +38,9 @@
 
   &__close-btn {
     width: fit-content;
-    border: 1px solid #000;
     border-radius: 15px;
     padding: 1.25vw 1.75vw;
-    background-color: #fff;
+    background-color: #353935;
     font-size: 1.5rem;
     cursor: pointer;
   }
@@ -56,9 +56,15 @@
 
   &__sub-heading {
     padding-bottom: 0.5rem;
+    text-decoration: underline;
+    font-size: 700;
   }
 
   &__movement {
     margin-bottom: 0.5rem;
+  }
+
+  &__explain {
+    margin-top: 1rem;
   }
 }

@@ -62,6 +62,14 @@
     }
   }
 
+  &__form-upload {
+  }
+
+  &__picture {
+    height: 12.5vw;
+    width: 12.5vw;
+    border-radius: 50%;
+  }
   &__container-login {
     display: flex;
     justify-content: center;

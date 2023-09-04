@@ -1,17 +1,14 @@
 import "./Match.scss";
 import { useState, useEffect } from "react";
-import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import { db } from "../../firebase-config";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
-const Match = ({ matchID, updateDataFromMatch }) => {
+const Match = ({ userData }) => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
-  // const [userData, setUserData] = useState(null);
   const [movement, setMovement] = useState("Pull-ups");
   const [movementSubmitted, setMovementSubmitted] = useState(false);
-  const [matchData, setMatchData] = useState(true);
 
   const handleChange = (e) => {
     setMovement(e.target.value);
@@ -22,7 +19,7 @@ const Match = ({ matchID, updateDataFromMatch }) => {
 
     try {
       const userDoc = doc(db, "users", loggedInUser);
-      const matchDoc = doc(db, "matches", matchID);
+      const matchDoc = doc(db, "matches", userData.match);
 
       await Promise.all([
         updateDoc(userDoc, { movement: movement }),
@@ -30,7 +27,6 @@ const Match = ({ matchID, updateDataFromMatch }) => {
       ]);
 
       setMovementSubmitted(true);
-      updateDataFromMatch(matchData);
     } catch (error) {
       console.log(error);
     }
@@ -57,12 +53,12 @@ const Match = ({ matchID, updateDataFromMatch }) => {
               <div className="match__users">
                 <img
                   className="match__user"
-                  src={ProfilePic}
+                  src={userData.photoURL}
                   alt="Placeholder"
                 />
                 <img
                   className="match__user"
-                  src={ProfilePic}
+                  src={userData.opponentPhoto}
                   alt="Placeholder"
                 />
               </div>

@@ -1,9 +1,11 @@
 .bar {
   width: 90vw;
   height: 65vw;
+  color: white;
 
   &__heading {
     text-align: center;
     padding-bottom: 1rem;
+    font-size: 1.5rem;
   }
 }

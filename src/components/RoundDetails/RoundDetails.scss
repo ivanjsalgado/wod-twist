@@ -1,43 +1,38 @@
+@use "../../styles/partials/typography" as *;
+
 .round {
   display: flex;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
+  color: white;
 
-  &__container-win {
+  &__container {
     display: flex;
     justify-content: space-between;
     width: 100vw;
-    background-color: #fafafa;
-    border-radius: 0.5rem;
-    border: 1px solid black;
-    margin-top: 1rem;
-    background-color: lightgreen;
-  }
+    border: 2px solid #ffbf00;
+    // border-top: 2px solid #ffbf00;
+    // border-right: 2px solid #ffbf00;
+    // border-left: 2px solid #ffbf00;
 
-  &__container-lose {
-    display: flex;
-    justify-content: space-between;
-    width: 100vw;
-    background-color: #fafafa;
-    border-radius: 0.5rem;
-    border: 1px solid black;
-    margin-top: 1rem;
-    background-color: red;
+    &--color {
+      @extend .round__container;
+      background-color: #494f55;
+    }
   }
 
   &__user {
     display: flex;
     flex-direction: column;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 0.5rem;
     align-items: center;
-    border-radius: 0.5rem;
-    background-color: #e1e1e1;
   }
 
   &__picture {
     height: 15vw;
     width: 15vw;
     border-radius: 50%;
+    margin-top: 0.5rem;
+    border: white;
   }
 
   &__userName {
@@ -45,6 +40,7 @@
     line-height: 1.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    font-weight: 700;
   }
 
   &__result-container {
@@ -61,5 +57,11 @@
   &__result {
     font-size: 1.5rem;
     line-height: 2rem;
+    color: #e63b38;
+
+    &--color {
+      @extend .round__result;
+      color: #6cc955;
+    }
   }
 }

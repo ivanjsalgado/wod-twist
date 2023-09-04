@@ -56,16 +56,16 @@ function BarGraph({ history }) {
     labels,
     datasets: [
       {
-        label: "Win Data",
+        label: "Win",
         data: winData,
-        backgroundColor: "rgba(0, 156, 98, 1",
-        // backgroundColor: "rgba(175, 225, 175, 0.6)",
+        backgroundColor: " #6cc955",
+        borderColor: "white",
       },
       {
-        label: "Loss Data",
+        label: "Loss",
         data: loseData,
-        // backgroundColor: "rgba(243, 207, 198, 0.6)",
         backgroundColor: "rgba(210, 4, 45, 1)",
+        borderColor: "white",
       },
     ],
   };
@@ -73,26 +73,56 @@ function BarGraph({ history }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: "white",
+        },
+      },
+    },
     title: {
       display: true,
       text: "Graph",
+      color: "white",
+      font: {
+        size: "15",
+      },
     },
     scales: {
       y: {
+        grid: {
+          color: "white",
+        },
         title: {
           display: true,
           text: "Matches",
+          color: "white",
         },
         ticks: {
           precision: 0,
+          color: "white",
+          font: {
+            size: "12.5",
+          },
         },
         min: 0,
         max: history.length,
       },
       x: {
+        grid: {
+          color: "grey",
+        },
         title: {
           display: true,
           text: "Movements",
+          color: "white",
+        },
+        ticks: {
+          precision: 0,
+          color: "white",
+          font: {
+            size: "12.5",
+          },
         },
       },
     },
@@ -100,7 +130,7 @@ function BarGraph({ history }) {
 
   return (
     <div className="bar">
-      <h1 className="bar__heading">User's Stats</h1>
+      <h1 className="bar__heading">Statistics</h1>
       <Bar data={data} options={options} />
     </div>
   );

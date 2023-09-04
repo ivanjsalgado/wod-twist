@@ -14,10 +14,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
-import History from "../../assets/images/noun-recent-1076890.svg";
-import MatchIcon from "../../assets/images/noun-group-4213640.svg";
+import History from "../../assets/images/noun-recent-1076890_copy-01.svg";
+import MatchIcon from "../../assets/images/ppl3-01.svg";
 import Match from "../Match/Match";
-import Leaderboard from "../../assets/images/Adobe_test.svg";
+import Leaderboard from "../../assets/images/leader-01.svg";
 import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
 
@@ -34,12 +34,12 @@ export default function Home() {
   const [currentWorkoutID, setCurrentWorkoutID] = useState("");
   const [selectedMovement, setSelectedMovement] = useState(false);
 
-  const updateDataFromMatch = (newData) => {
-    setSelectedMovement(true);
-  };
-
   const leaderboardClick = () => {
-    navigate("/leaderboard");
+    navigate("/leaderboard", {
+      state: {
+        userPhoto: userData.photoURL,
+      },
+    });
   };
 
   const historyClick = () => {
@@ -145,7 +145,6 @@ export default function Home() {
             const opponentRef = doc(db, "users", userData.opponent);
             const getOpponentMovement = await getDoc(opponentRef);
             const opponentMovement = getOpponentMovement.data().movement;
-            const opponentName = getOpponentMovement.data().name;
             const workoutsRef = collection(db, "workouts");
             const workoutsSnapshot = await getDocs(workoutsRef);
             const workouts = workoutsSnapshot.docs.map((workoutDoc) => ({
@@ -165,11 +164,9 @@ export default function Home() {
             await Promise.all([
               updateDoc(userRef, {
                 workoutID: randomWorkoutID,
-                opponentName: opponentName,
               }),
               updateDoc(opponentRef, {
                 workoutID: randomWorkoutID,
-                opponentName: userData.name,
               }),
               updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
@@ -181,6 +178,7 @@ export default function Home() {
             const matchRefAgain = doc(db, "matches", matchID);
             const fetchedMovements = await getDoc(matchRefAgain);
             const movementsData = fetchedMovements.data();
+            console.log(movementsData, "retrieved");
             let result = "";
             let points = 0;
 
@@ -210,6 +208,7 @@ export default function Home() {
                 matched: false,
                 movement: "",
                 opponent: "",
+                opponentPhoto: "",
                 workoutID: "",
                 points: userData.points + points,
                 history: arrayUnion({
@@ -217,6 +216,7 @@ export default function Home() {
                   repetitions: movementsData[loggedInUser].repetitions,
                   workoutID: userData.workoutID,
                   time: Number(movementsData[loggedInUser].userTime),
+                  // opponentPhoto: movementsData[loggedInUser].opponentPhoto,
                   opponentTime: Number(
                     movementsData[loggedInUser].opponentTime
                   ),
@@ -262,6 +262,9 @@ export default function Home() {
         const matchDocRef = doc(db, "matches", generatedMatchID);
         const userOneDocRef = doc(db, "users", userOne.id);
         const userTwoDocRef = doc(db, "users", userTwo.id);
+        const getOpponentInfo = await getDoc(userTwoDocRef);
+        const opponentPhoto = getOpponentInfo.data().photoURL;
+        const opponentName = getOpponentInfo.data().name;
         const userOneQueueDocRef = doc(db, "queueList", userOne.id);
         const userTwoQueueDocRef = doc(db, "queueList", userTwo.id);
 
@@ -274,6 +277,8 @@ export default function Home() {
           updateDoc(userOneDocRef, {
             matched: true,
             opponent: userTwo.id,
+            opponentName: opponentName,
+            opponentPhoto: opponentPhoto,
             match: generatedMatchID,
             queue: false,
             matchTime: 0,
@@ -282,6 +287,8 @@ export default function Home() {
           updateDoc(userTwoDocRef, {
             matched: true,
             opponent: userOne.id,
+            opponentName: userData.name,
+            opponentPhoto: userData.photoURL,
             match: generatedMatchID,
             queue: false,
             matchTime: 0,
@@ -311,14 +318,14 @@ export default function Home() {
 
   return (
     <div className="home">
-      <Header />
+      <Header photo={userData.photoURL} />
       <div className="home__deadline">
-        <h1 className="home__title">Workout Deadline</h1>
+        <h1 className="home__title">Submission Timer</h1>
         <p className="home__time">99:99:99</p>
       </div>
       <div className="home__workout-container">
         {matched && currentWorkoutID === "" ? (
-          <Match updateDataFromMatch={updateDataFromMatch} matchID={matchID} />
+          <Match userData={userData} />
         ) : (
           <></>
         )}

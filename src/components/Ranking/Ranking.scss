@@ -1,23 +1,31 @@
+@use "../../styles/partials/typography" as *;
+
 .ranking {
   display: flex;
-  justify-content: center;
-  padding-bottom: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  &:last-of-type .ranking__container {
+    border-bottom: 2px solid #ffbf00;
+  }
   &__container {
     display: flex;
-    width: 80vw;
-    border: 1px solid black;
-    border-radius: 1.5rem;
-  }
-  &__pic {
-    height: 12.5vw;
-    width: 12.5vw;
-    border-radius: 50%;
+    width: 100vw;
+    height: 15vw;
+    border-top: 2px solid #ffbf00;
+    border-right: 2px solid #ffbf00;
+    border-left: 2px solid #ffbf00;
+    align-items: center;
+    justify-content: space-between;
+
+    &--color {
+      @extend .ranking__container;
+      background-color: #494f55;
+    }
   }
 
-  &__container-user {
+  &__container-two {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
     margin-left: 1rem;
   }
 
@@ -26,6 +34,28 @@
     align-items: center;
     flex-grow: 1;
     justify-content: flex-end;
+    margin-right: 2rem;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__pic {
+    height: 12.5vw;
+    width: 12.5vw;
+    border-radius: 50%;
+    margin-right: 2rem;
+    border: 2px solid white;
+  }
+
+  &__name {
+    font-weight: 700;
+  }
+
+  &__container-points {
+    display: flex;
     margin-right: 1rem;
+  }
+  &__points {
+    text-align: right;
   }
 }

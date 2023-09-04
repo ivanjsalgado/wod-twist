@@ -1,6 +1,9 @@
 .home {
   display: flex;
   flex-direction: column;
+  background-color: #353935;
+  height: 200vw;
+  color: white;
 
   &__deadline {
     display: flex;

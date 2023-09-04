@@ -3,12 +3,15 @@ import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering
 import Workout from "../Workout/Workout";
 
 function RoundDetails({
+  workoutID,
   result,
   opponentTime,
   time,
   name,
   opponentName,
-  workoutID,
+  opponentPhoto,
+  photo,
+  index,
 }) {
   let minutes = Math.floor(time / 60);
   let seconds = time % 60;
@@ -23,17 +26,11 @@ function RoundDetails({
     <div className="round">
       <div
         className={
-          result === "Victory" || result === "Tie"
-            ? "round__container-win"
-            : "round__container-lose"
+          index % 2 !== 0 ? "round__container" : "round__container--color"
         }
       >
         <div className="round__user">
-          <img
-            className="round__picture"
-            src={ProfilePic}
-            alt="User One Profile"
-          />
+          <img className="round__picture" src={photo} alt="User One Profile" />
           <h2 className="round__userName">{name}</h2>
           <p>
             {minTwoDigits(minutes)}:{minTwoDigits(seconds)}
@@ -41,14 +38,20 @@ function RoundDetails({
         </div>
         <div className="round__result-container">
           <div className="round__wl-container">
-            <h1 className="round__result">{result}</h1>
+            <h1
+              className={
+                result === "Defeat" ? "round__result" : "round__result--color"
+              }
+            >
+              {result}
+            </h1>
           </div>
           <Workout workoutID={workoutID} />
         </div>
         <div className="round__user">
           <img
             className="round__picture"
-            src={ProfilePic}
+            src={opponentPhoto}
             alt="User Two Profile"
           />
           <h2 className="round__userName">{opponentName}</h2>
