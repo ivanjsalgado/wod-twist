@@ -38,11 +38,10 @@
 
   &__close-btn {
     width: fit-content;
-    border-radius: 15px;
-    padding: 1.25vw 1.75vw;
     background-color: #353935;
     font-size: 1.5rem;
     cursor: pointer;
+    color: white;
   }
 
   &__heading {
@@ -57,14 +56,17 @@
   &__sub-heading {
     padding-bottom: 0.5rem;
     text-decoration: underline;
-    font-size: 700;
+    font-weight: 700;
   }
 
   &__movement {
     margin-bottom: 0.5rem;
+    color: white;
   }
 
   &__explain {
     margin-top: 1rem;
+    color: white;
+    font-weight: 700;
   }
 }

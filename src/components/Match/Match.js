@@ -63,7 +63,7 @@ const Match = ({ userData }) => {
                 />
               </div>
               {movementSubmitted ? (
-                <div>
+                <div className="match__container">
                   <p className="match__submitted">
                     Movement Submitted: {movement}
                   </p>

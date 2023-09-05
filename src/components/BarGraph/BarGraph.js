@@ -130,7 +130,6 @@ function BarGraph({ history }) {
 
   return (
     <div className="bar">
-      <h1 className="bar__heading">Statistics</h1>
       <Bar data={data} options={options} />
     </div>
   );

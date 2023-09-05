@@ -16,6 +16,7 @@ import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
 import History from "../../assets/images/noun-recent-1076890_copy-01.svg";
 import MatchIcon from "../../assets/images/ppl3-01.svg";
+import Loading from "../../assets/images/loading.png";
 import Match from "../Match/Match";
 import Leaderboard from "../../assets/images/leader-01.svg";
 import Header from "../Header/Header";
@@ -32,7 +33,6 @@ export default function Home() {
   const [queued, setQueued] = useState(false);
   const [matched, setMatched] = useState(false);
   const [currentWorkoutID, setCurrentWorkoutID] = useState("");
-  const [selectedMovement, setSelectedMovement] = useState(false);
 
   const leaderboardClick = () => {
     navigate("/leaderboard", {
@@ -87,7 +87,7 @@ export default function Home() {
     } else {
       updateQueue("delete");
     }
-  }, [queued]);
+  }, [queued, matched]);
 
   const getUserData = async () => {
     try {
@@ -101,7 +101,6 @@ export default function Home() {
         setQueued(data.queue);
         setMatched(data.matched);
         setCurrentWorkoutID(data.workoutID);
-        console.log(userData);
       } else {
         console.log("User was not found");
       }
@@ -117,7 +116,7 @@ export default function Home() {
     return () => {
       unsubscribe();
     };
-  }, [loggedInUser, selectedMovement]);
+  }, [loggedInUser]);
 
   useEffect(() => {
     if (matchID === "") return;
@@ -331,6 +330,10 @@ export default function Home() {
         )}
         {currentWorkoutID !== "" ? <Modal data={userData} /> : <></>}
       </div>
+      <div className="home__container-wods">
+        <h2 className="home__wods-heading">WODs Completed</h2>
+        <p className="home__wods">{userData.history.length}</p>
+      </div>
       <div className="home__graph">
         <BarGraph history={userData.history} />
       </div>
@@ -344,7 +347,7 @@ export default function Home() {
         <img
           onClick={handleQueueClick}
           className={queued ? "home__footer-btn-active" : "home__footer-btn"}
-          src={MatchIcon}
+          src={queued ? Loading : MatchIcon}
           alt="History Icon"
         />
         <img

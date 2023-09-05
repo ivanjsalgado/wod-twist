@@ -7,7 +7,7 @@ import {
 import "./Login.scss";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/IMG-5638.PNG";
+import Logo from "../../assets/images/WOD_TWIST_fixed.svg";
 import { db, auth } from "../../firebase-config";
 import { setDoc, doc } from "firebase/firestore";
 
@@ -55,18 +55,9 @@ const Login = () => {
       });
   };
 
-  // const logout = async () => {
-  //   try {
-  //     await signOut(auth);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   return (
     <div className="login">
       <div className="login__heading-container">
-        <h1 className="login__heading-welcome">Welcome to</h1>
         <img className="login__logo" src={Logo} alt="Logo" />
       </div>
       <form onSubmit={signIn} className="login__form">
@@ -101,9 +92,6 @@ const Login = () => {
           <p className="login__sign-up">Don't have an account?</p>
           <p className="login__sign-up login__sign-up--ml">Sign up</p>
         </Link>
-      </div>
-      <div className="login__option-text">
-        <p className="login__small-text">Or Login with</p>
       </div>
       <div className="login__option-icons">
         <button onClick={signInWithGoogle} class="login__google">

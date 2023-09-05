@@ -1,5 +1,4 @@
 import "./Ranking.scss";
-import Profile from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 function Ranking({ name, points, index, photo }) {
   return (
     <div className="ranking">

@@ -1,5 +1,4 @@
 import "./RoundDetails.scss";
-import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
 import Workout from "../Workout/Workout";
 
 function RoundDetails({

@@ -5,14 +5,17 @@
   padding: 0 1rem;
   color: white;
 
+  &:last-of-type .round__container {
+    border: 2px solid #ffbf00;
+  }
+
   &__container {
     display: flex;
     justify-content: space-between;
     width: 100vw;
-    border: 2px solid #ffbf00;
-    // border-top: 2px solid #ffbf00;
-    // border-right: 2px solid #ffbf00;
-    // border-left: 2px solid #ffbf00;
+    border-top: 2px solid #ffbf00;
+    border-right: 2px solid #ffbf00;
+    border-left: 2px solid #ffbf00;
 
     &--color {
       @extend .round__container;

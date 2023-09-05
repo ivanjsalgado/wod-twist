@@ -5,6 +5,7 @@ import { auth, db, storage } from "../../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Link, useNavigate } from "react-router-dom";
 import { setDoc, doc } from "firebase/firestore";
+import Logo from "../../assets/images/WOD_TWIST_002-01.svg";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -13,11 +14,8 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const [imageURL, setImageURL] = useState("");
-  const [image, setImage] = useState();
-  const [destinationPath, setDestinationPath] = useState("");
 
   useEffect(() => {
-    // Load default avatar URL when the component mounts
     const defaultAvatar = ref(storage, "images/user.png");
     getDownloadURL(defaultAvatar)
       .then((url) => {
@@ -26,7 +24,7 @@ export default function SignUp() {
       .catch((error) => {
         console.error("Error getting image URL:", error);
       });
-  }, []); // Ensure this effect runs only once when the component mounts
+  }, []);
 
   const uploadImageToFirebaseStorage = async (file, destination) => {
     if (!file) return;
@@ -54,7 +52,6 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     try {
-      // Create a new user with email and password
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -62,7 +59,6 @@ export default function SignUp() {
       );
       const userID = userCredential.user.uid;
 
-      // Create a user document in Firestore
       await setDoc(doc(db, "users", userID), {
         email: email,
         name: name,
@@ -102,9 +98,7 @@ export default function SignUp() {
   return (
     <>
       <div className="sign">
-        <div className="sign__heading-container">
-          <h1 className="sign__heading-welcome">Sign Up</h1>
-        </div>
+        <img className="sign__logo" src={Logo} alt="Logo" />
         <form onSubmit={signUp} className="sign__form">
           <label className="sign__label">Name</label>
           <input
@@ -139,7 +133,13 @@ export default function SignUp() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <div className="sign__form-upload">
-            <input type="file" onChange={handleChange} />
+            <label className="sign__label">Upload Photo:</label>
+            <input
+              placeholder="Import Photo"
+              type="file"
+              onChange={handleChange}
+              className="sign__import"
+            />
           </div>
           <div className="sign__container-login">
             <button type="submit" className="sign__sign-button">
