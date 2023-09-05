@@ -1,16 +1,19 @@
 import "./Ranking.scss";
-import Profile from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
-function Ranking({ name, points, index, key }) {
+function Ranking({ name, points, index, photo }) {
   return (
     <div className="ranking">
-      <div className="ranking__container">
-        <img className="ranking__pic" src={Profile} alt="User" />
-        <div className="ranking__container-user">
-          <p>{name}</p>
-          <p>{points} Points</p>
+      <div
+        className={
+          index % 2 === 0 ? "ranking__container" : "ranking__container--color"
+        }
+      >
+        <div className="ranking__container-two">
+          <p className="ranking__rank">{index}</p>
+          <img className="ranking__pic" src={photo} alt="User" />
+          <p className="ranking__name">{name}</p>
         </div>
-        <div className="ranking__rank">
-          <p>{index}</p>
+        <div className="ranking__container-points">
+          <p className="ranking__points">{points}</p>
         </div>
       </div>
     </div>

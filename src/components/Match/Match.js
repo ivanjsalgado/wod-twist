@@ -1,15 +1,14 @@
 import "./Match.scss";
-import { useState } from "react";
-import ProfilePic from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
+import { useState, useEffect } from "react";
 import { db } from "../../firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
 
-const Match = ({ data }) => {
+const Match = ({ userData }) => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
-  const [movement, setMovement] = useState(data.movement || "Pull-ups");
-  const [movementSubmitted, setMovementSubmitted] = useState(!!data.movement);
+  const [movement, setMovement] = useState("Pull-ups");
+  const [movementSubmitted, setMovementSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setMovement(e.target.value);
@@ -20,7 +19,7 @@ const Match = ({ data }) => {
 
     try {
       const userDoc = doc(db, "users", loggedInUser);
-      const matchDoc = doc(db, "matches", data.match);
+      const matchDoc = doc(db, "matches", userData.match);
 
       await Promise.all([
         updateDoc(userDoc, { movement: movement }),
@@ -54,19 +53,19 @@ const Match = ({ data }) => {
               <div className="match__users">
                 <img
                   className="match__user"
-                  src={ProfilePic}
+                  src={userData.photoURL}
                   alt="Placeholder"
                 />
                 <img
                   className="match__user"
-                  src={ProfilePic}
+                  src={userData.opponentPhoto}
                   alt="Placeholder"
                 />
               </div>
               {movementSubmitted ? (
-                <div>
+                <div className="match__container">
                   <p className="match__submitted">
-                    Movement Submitted: {data.movement}
+                    Movement Submitted: {movement}
                   </p>
                   <p className="match__submitted">
                     Waiting for Opponent's Selection

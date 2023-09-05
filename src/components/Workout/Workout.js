@@ -31,9 +31,9 @@ const Workout = ({ workoutID }) => {
 
   return (
     <div className="button">
-      <button className="button__btn" onClick={() => setShowModal(true)}>
+      <p className="button__btn" onClick={() => setShowModal(true)}>
         Show Workout
-      </button>
+      </p>
       {showModal ? (
         <div className="workout">
           <div className="workout__container-content">
@@ -45,12 +45,12 @@ const Workout = ({ workoutID }) => {
                 &times;
               </span>
             </div>
-            <h1 className="workout__heading">Workout</h1>
+            <h1 className="workout__heading">WOD</h1>
             <div className="workout__content">
               {rounds !== 0 ? (
                 <p className="workout__rounds">{rounds} rounds for time of:</p>
               ) : (
-                <p className="workout__sub-heading">For Time:</p>
+                <p className="workout__sub-heading">For Time</p>
               )}
               <div>
                 {movements.map((movement, index) => {
@@ -61,6 +61,9 @@ const Workout = ({ workoutID }) => {
                   );
                 })}
               </div>
+              <p className="workout__explain">
+                Complete the movements above as fast as you can
+              </p>
             </div>
           </div>
         </div>

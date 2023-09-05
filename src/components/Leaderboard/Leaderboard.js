@@ -1,13 +1,14 @@
 import "./Leaderboard.scss";
-import BackAg from "../../assets/images/Back_Again.png";
-import { Link } from "react-router-dom";
-import Profile from "../../assets/images/Ivan Salgado  - Software Engineering - June Miami 2023.jpg";
+import BackAg from "../../assets/images/Back_Again_copy.png";
+import { Link, useLocation } from "react-router-dom";
 import Ranking from "../Ranking/Ranking";
 import { db } from "../../firebase-config";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 
 function Leaderboard() {
+  const location = useLocation();
+  const userPhoto = location.state.userPhoto;
   const [userList, setUserList] = useState([]);
   const userCollectionRef = collection(db, "users");
 
@@ -18,10 +19,10 @@ function Leaderboard() {
         ...doc.data(),
         id: doc.id,
       }));
-      setUserList(userData);
-      userList.sort((a, b) => {
+      const sortUsers = userData.sort((a, b) => {
         return b.points - a.points;
       });
+      setUserList(sortUsers);
     } catch (err) {
       console.error(err);
     }
@@ -42,14 +43,19 @@ function Leaderboard() {
           <img className="leaderboard__back" src={BackAg} alt="Back Icon" />
         </Link>
         <h1 className="leaderboard__heading">Leaderboard</h1>
-        <img className="leaderboard__photo" src={Profile} alt="User Profile" />
+        <img
+          className="leaderboard__photo"
+          src={userPhoto}
+          alt="User Profile"
+        />
       </div>
       {userList.map((user, index) => (
         <Ranking
-          key={index}
+          key={index + 1}
           index={index + 1}
           name={user.name}
           points={user.points}
+          photo={user.photoURL}
         />
       ))}
     </div>

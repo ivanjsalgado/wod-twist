@@ -2,13 +2,14 @@ import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import "./Login.scss";
-import { googleProvider, auth } from "../../firebase-config";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/IMG-5638.PNG";
+import Logo from "../../assets/images/WOD_TWIST_fixed.svg";
+import { db, auth } from "../../firebase-config";
+import { setDoc, doc } from "firebase/firestore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,32 +26,38 @@ const Login = () => {
         navigate("/home");
       })
       .catch((error) => {
+        console.log(error);
         alert("Invalid user email and/or password");
         return;
       });
   };
 
   const signInWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      navigate("/home");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        console.log(result, "result");
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        sessionStorage.setItem("user", user);
+        localStorage.setItem("user", user);
 
-  // const logout = async () => {
-  //   try {
-  //     await signOut(auth);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+        const userData = {
+          email: user.email,
+          photoURL: user.photoURL,
+        };
+
+        await setDoc(userRef, userData, { merge: true });
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="login">
       <div className="login__heading-container">
-        <h1 className="login__heading-welcome">Welcome to</h1>
         <img className="login__logo" src={Logo} alt="Logo" />
       </div>
       <form onSubmit={signIn} className="login__form">
@@ -85,9 +92,6 @@ const Login = () => {
           <p className="login__sign-up">Don't have an account?</p>
           <p className="login__sign-up login__sign-up--ml">Sign up</p>
         </Link>
-      </div>
-      <div className="login__option-text">
-        <p className="login__small-text">Or Login with</p>
       </div>
       <div className="login__option-icons">
         <button onClick={signInWithGoogle} class="login__google">

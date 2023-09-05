@@ -13,7 +13,6 @@ const Modal = ({ data }) => {
   const loggedInUser = localStorage.getItem("user");
   const [userData, setUserData] = useState(data);
   const [timeSubmitted, setTimeSubmitted] = useState(false);
-  console.log(minutes, "minutes", seconds, "seconds");
 
   useEffect(() => {
     const getWorkout = async () => {
@@ -83,12 +82,12 @@ const Modal = ({ data }) => {
                 &times;
               </span>
             </div>
-            <h1 className="modal__heading">Workout</h1>
+            <h1 className="modal__heading">WOD</h1>
             <div className="modal__content">
               {rounds !== 0 ? (
                 <p className="modal__rounds">{rounds} rounds for time of:</p>
               ) : (
-                <p className="modal__sub-heading">For Time:</p>
+                <p className="modal__sub-heading">For Time</p>
               )}
               <div>
                 {movements.map((movement, index) => {

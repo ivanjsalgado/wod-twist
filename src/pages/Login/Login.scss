@@ -8,36 +8,23 @@
   min-height: 100vh;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    45deg,
-    rgba(20, 52, 164, 1),
-    rgba(255, 234, 0, 0.8)
-  );
+  background-color: #494f55;
   flex-direction: column;
 
   &__heading-container {
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-bottom: 1.5rem;
-  }
-
-  &__heading-welcome {
-    color: $white;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 700;
   }
 
   &__logo {
-    width: 62.5vw;
-    height: 31.25vw;
+    height: 65vw;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    width: 85vw;
+    width: 65vw;
   }
 
   &__form-input {
@@ -103,12 +90,6 @@
       margin-left: 0.5rem;
       color: #7df9ff;
     }
-  }
-
-  &__option-text {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 1.5rem;
   }
 
   &__option-icons {
