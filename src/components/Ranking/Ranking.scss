@@ -32,11 +32,10 @@
   &__rank {
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    justify-content: flex-end;
     margin-right: 2rem;
     font-size: 2rem;
     font-weight: 700;
+    width: 4vw;
   }
 
   &__pic {

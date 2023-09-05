@@ -21,7 +21,7 @@
 
   &__container-content {
     width: 75vw;
-    background-color: #494f55;
+    background-color: #353935;
     border-radius: 5px;
     padding: 1rem;
     display: flex;
@@ -36,7 +36,6 @@
 
   &__close-btn {
     width: fit-content;
-    background-color: #494f55;
     font-size: 1.5rem;
     cursor: pointer;
   }
@@ -55,10 +54,18 @@
     padding-bottom: 0.5rem;
     text-decoration: underline;
     font-weight: 700;
+    color: #ffbf00;
   }
 
   &__movement {
     margin-bottom: 0.5rem;
+  }
+
+  &__submitted {
+    padding: 1rem 0rem;
+    font-size: 1.25rem;
+    text-align: center;
+    font-weight: 700;
   }
 
   &__form {

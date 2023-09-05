@@ -100,7 +100,7 @@ const Modal = ({ data }) => {
               </div>
             </div>
             {data.matchTime !== 0 || timeSubmitted ? (
-              <p>Time has been submitted</p>
+              <p className="modal__submitted">Time has been submitted</p>
             ) : (
               <form className="modal__form" onSubmit={submit}>
                 <div className="modal__form-container">

@@ -1,14 +1,60 @@
 import "./Match.scss";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 
-const Match = ({ userData }) => {
+const Match = () => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
   const [movement, setMovement] = useState("Pull-ups");
   const [movementSubmitted, setMovementSubmitted] = useState(false);
+  const [userData, setUserData] = useState();
+  const [rivalPhoto, setRivalPhoto] = useState();
+  const [retrievedData, setRetrievedData] = useState(false);
+
+  const getUserData = async () => {
+    try {
+      const userDoc = doc(db, "users", loggedInUser);
+      const snap = await getDoc(userDoc);
+
+      if (snap.exists()) {
+        const data = snap.data();
+        setUserData(data);
+        setRetrievedData(true);
+      } else {
+        console.log("User was not found");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateUserData = async () => {
+    if (!userData) return;
+    const userDoc = doc(db, "users", userData.opponent);
+    const updateDoc = doc(db, "users", loggedInUser);
+    try {
+      const snap = await getDoc(userDoc);
+      const data = snap.data();
+      setRivalPhoto(data.photoURL);
+      console.log(data, "opponentData");
+      await updateDoc(updateDoc, {
+        opponentName: data.name,
+        opponentPhoto: data.photoURL,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  useEffect(() => {
+    updateUserData();
+  }, [retrievedData]);
 
   const handleChange = (e) => {
     setMovement(e.target.value);
@@ -31,6 +77,10 @@ const Match = ({ userData }) => {
       console.log(error);
     }
   };
+
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -58,7 +108,7 @@ const Match = ({ userData }) => {
                 />
                 <img
                   className="match__user"
-                  src={userData.opponentPhoto}
+                  src={rivalPhoto}
                   alt="Placeholder"
                 />
               </div>
