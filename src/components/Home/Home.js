@@ -117,7 +117,7 @@ export default function Home() {
     return () => {
       unsubscribe();
     };
-  }, [loggedInUser, matched, generateResult]);
+  }, [loggedInUser, matched, generateResult, currentWorkoutID, queued]);
 
   useEffect(() => {
     if (matchID === "") return;
@@ -158,7 +158,9 @@ export default function Home() {
             const index = Math.floor(Math.random() * viableWorkouts.length);
             console.log(viableWorkouts[0]);
             const randomWorkoutID = viableWorkouts[index].id;
-            console.log(randomWorkoutID);
+            if (randomWorkoutID !== "") {
+              setCurrentWorkoutID(randomWorkoutID);
+            }
 
             const userRef = doc(db, "users", loggedInUser);
             await Promise.all([
@@ -241,7 +243,7 @@ export default function Home() {
         }
       }
     );
-  }, [matchID]);
+  }, [matchID, generateResult, queued]);
 
   const startMatchmaking = async () => {
     try {
@@ -252,8 +254,6 @@ export default function Home() {
 
       while (queuedUsers.length > 1) {
         console.log("Once match has been found");
-        setMatched(true);
-        setQueued(false);
         const [userOne, userTwo] = queuedUsers.splice(0, 2);
         const matchData = {
           userSelected: false,
@@ -295,6 +295,8 @@ export default function Home() {
           deleteDoc(userOneQueueDocRef),
           deleteDoc(userTwoQueueDocRef),
           setMatchID(generatedMatchID),
+          setQueued(false),
+          setMatched(true),
         ]);
       }
     } catch (err) {
