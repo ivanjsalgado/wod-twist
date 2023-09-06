@@ -3,15 +3,21 @@ import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 
-const Match = () => {
+const Match = ({ updateDataInParent, data }) => {
   const loggedInUser =
     sessionStorage.getItem("user") || localStorage.getItem("user");
   const [showModal, setShowModal] = useState(false);
   const [movement, setMovement] = useState("Pull-ups");
   const [movementSubmitted, setMovementSubmitted] = useState(false);
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState(data);
   const [rivalPhoto, setRivalPhoto] = useState();
   const [retrievedData, setRetrievedData] = useState(false);
+  const [modalData, setModalData] = useState(true);
+
+  const closeModal = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
 
   const getUserData = async () => {
     try {
@@ -65,7 +71,7 @@ const Match = () => {
 
     try {
       const userDoc = doc(db, "users", loggedInUser);
-      const matchDoc = doc(db, "matches", userData.match);
+      const matchDoc = doc(db, "matches", data.match);
 
       await Promise.all([
         updateDoc(userDoc, { movement: movement }),
@@ -91,10 +97,7 @@ const Match = () => {
         <div className="match">
           <div className="match__container-content">
             <div className="match__close">
-              <span
-                className="match__close-btn"
-                onClick={() => setShowModal(false)}
-              >
+              <span className="match__close-btn" onClick={closeModal}>
                 &times;
               </span>
             </div>

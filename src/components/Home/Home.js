@@ -33,7 +33,13 @@ export default function Home() {
   const [queued, setQueued] = useState(false);
   const [matched, setMatched] = useState(false);
   const [currentWorkoutID, setCurrentWorkoutID] = useState("");
+  const [workout, setWorkout] = useState(false);
   const [generateResult, setGenerateResult] = useState(false);
+
+  const updateDataInParent = (newData) => {
+    // Update your data or state here
+    setWorkout(newData);
+  };
 
   const leaderboardClick = () => {
     navigate("/leaderboard", {
@@ -117,7 +123,14 @@ export default function Home() {
     return () => {
       unsubscribe();
     };
-  }, [loggedInUser, matched, generateResult, currentWorkoutID, queued]);
+  }, [
+    loggedInUser,
+    matched,
+    generateResult,
+    currentWorkoutID,
+    queued,
+    workout,
+  ]);
 
   useEffect(() => {
     if (matchID === "") return;
@@ -172,7 +185,7 @@ export default function Home() {
               }),
               updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
-            setCurrentWorkoutID(randomWorkoutID);
+            window.location.reload();
           }
 
           if (readyToLog) {
@@ -237,13 +250,18 @@ export default function Home() {
             setGenerateResult(true);
             const deleteDocRef = doc(db, "matches", userData.match);
             await deleteDoc(deleteDocRef);
+            setWorkout(false);
+            setMatchID("");
+            setQueued(false);
+            setMatched(false);
+            setCurrentWorkoutID("");
           }
         } catch (error) {
           console.log(error);
         }
       }
     );
-  }, [matchID, generateResult, queued]);
+  }, [matchID, generateResult, queued, workout, currentWorkoutID]);
 
   const startMatchmaking = async () => {
     try {
@@ -324,7 +342,7 @@ export default function Home() {
       </div>
       <div className="home__workout-container">
         {matched && currentWorkoutID === "" ? (
-          <Match userData={userData} />
+          <Match updateDataInParent={updateDataInParent} data={userData} />
         ) : (
           <></>
         )}
