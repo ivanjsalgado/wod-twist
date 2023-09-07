@@ -14,6 +14,11 @@ const Modal = ({ data }) => {
   const [userData, setUserData] = useState(data);
   const [timeSubmitted, setTimeSubmitted] = useState(false);
 
+  const closeModal = () => {
+    setShowModal(false);
+    // window.location.reload();
+  };
+
   useEffect(() => {
     const getWorkout = async () => {
       const fetchWorkout = await getDoc(doc(db, "workouts", data.workoutID));
@@ -75,10 +80,7 @@ const Modal = ({ data }) => {
         <div className="modal">
           <div className="modal__container-content">
             <div className="modal__close">
-              <span
-                className="modal__close-btn"
-                onClick={() => setShowModal(false)}
-              >
+              <span className="modal__close-btn" onClick={closeModal}>
                 &times;
               </span>
             </div>
