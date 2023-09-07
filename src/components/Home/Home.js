@@ -338,7 +338,7 @@ export default function Home() {
       <Header photo={userData.photoURL} />
       <div className="home__deadline">
         <h1 className="home__title">Submission Timer</h1>
-        <p className="home__time">99:99:99</p>
+        <p className="home__time">00:00</p>
       </div>
       <div className="home__workout-container">
         {matched && currentWorkoutID === "" ? (
