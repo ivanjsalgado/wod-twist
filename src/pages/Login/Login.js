@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/WOD_TWIST_Text.svg";
 import { db, auth } from "../../firebase-config";
-import { setDoc, doc } from "firebase/firestore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -32,28 +31,28 @@ const Login = () => {
       });
   };
 
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        console.log(result, "result");
-        const user = result.user;
-        const userRef = doc(db, "users", user.uid);
-        sessionStorage.setItem("user", user);
-        localStorage.setItem("user", user);
+  // const signInWithGoogle = async () => {
+  //   const provider = new GoogleAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then(async (result) => {
+  //       console.log(result, "result");
+  //       const user = result.user;
+  //       const userRef = doc(db, "users", user.uid);
+  //       sessionStorage.setItem("user", user);
+  //       localStorage.setItem("user", user);
 
-        const userData = {
-          email: user.email,
-          photoURL: user.photoURL,
-        };
+  //       const userData = {
+  //         email: user.email,
+  //         photoURL: user.photoURL,
+  //       };
 
-        await setDoc(userRef, userData, { merge: true });
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  //       await setDoc(userRef, userData, { merge: true });
+  //       navigate("/home");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <div className="login">

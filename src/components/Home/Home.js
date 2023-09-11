@@ -37,7 +37,6 @@ export default function Home() {
   const [generateResult, setGenerateResult] = useState(false);
 
   const updateDataInParent = (newData) => {
-    // Update your data or state here
     setWorkout(newData);
   };
 
@@ -142,10 +141,6 @@ export default function Home() {
           const data = await getDoc(matchRef);
           const usersMatchData = data.data();
 
-          // const readyToGenerate =
-          //   usersMatchData[loggedInUser].userSelected &&
-          //   usersMatchData[userData.opponent].userSelected;
-
           const readyToGenerate =
             usersMatchData[loggedInUser].movement !== "" &&
             usersMatchData[userData.opponent].movement !== "" &&
@@ -160,7 +155,6 @@ export default function Home() {
             usersMatchData[userData.opponent].retrievedResult;
 
           if (readyToGenerate) {
-            console.log("see me?");
             const opponentRef = doc(db, "users", userData.opponent);
             const getOpponentMovement = await getDoc(opponentRef);
             const opponentMovement = getOpponentMovement.data().movement;
@@ -175,23 +169,13 @@ export default function Home() {
               (workout) =>
                 workout[userData.movement] && workout[opponentMovement]
             );
-            // const viableWorkouts = workouts.filter(
-            //   (workout) =>
-            //     workout[opponentMovement] && workout[userData.movement]
-            // );
+
             const index = Math.floor(Math.random() * viableWorkouts.length);
             const randomWorkoutID = viableWorkouts[index].id;
             if (randomWorkoutID !== "") {
               setCurrentWorkoutID(randomWorkoutID);
               updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false });
             }
-            // const randomWorkoutID = viableWorkouts[0].id;
-            // if (randomWorkoutID !== "") {
-            //   setCurrentWorkoutID(randomWorkoutID);
-            //   updateDoc(matchRef, {
-            //     [`${loggedInUser}.userSelected`]: false,
-            //   });
-            // }
 
             const userRef = doc(db, "users", loggedInUser);
             await Promise.all([
@@ -201,7 +185,6 @@ export default function Home() {
               updateDoc(opponentRef, {
                 workoutID: randomWorkoutID,
               }),
-              // updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
             window.location.reload();
           }
