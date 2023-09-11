@@ -1,11 +1,12 @@
 @use "../../styles/partials/typography" as *;
+@use "../../styles/partials/colors" as *;
 
 .home {
   display: flex;
   flex-direction: column;
-  background-color: #353935;
+  background-color: $onyx;
   height: 200vw;
-  color: white;
+  color: $white;
   align-items: center;
 
   &__deadline {
@@ -37,7 +38,7 @@
   &__container-wods {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ffbf00;
+    border: 1px solid $yellow;
     padding: 1rem 0.5rem;
     width: 50vw;
     justify-content: center;

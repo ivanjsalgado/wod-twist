@@ -1,26 +1,27 @@
 @use "../../styles/partials/typography" as *;
+@use "../../styles/partials/colors" as *;
 
 .round {
   display: flex;
   padding: 0 1rem;
-  color: white;
-  background-color: #353935;
+  color: $white;
+  background-color: $onyx;
 
   &:last-of-type .round__container {
-    border: 2px solid #ffbf00;
+    border: 2px solid $yellow;
   }
 
   &__container {
     display: flex;
     justify-content: space-between;
     width: 100vw;
-    border-top: 2px solid #ffbf00;
-    border-right: 2px solid #ffbf00;
-    border-left: 2px solid #ffbf00;
+    border-top: 2px solid $yellow;
+    border-right: 2px solid $yellow;
+    border-left: 2px solid $yellow;
 
     &--color {
       @extend .round__container;
-      background-color: #494f55;
+      background-color: $grey;
     }
   }
 
@@ -29,6 +30,8 @@
     flex-direction: column;
     padding: 0.5rem;
     align-items: center;
+    width: 30vw;
+    justify-content: space-between;
   }
 
   &__picture {
@@ -36,7 +39,7 @@
     width: 15vw;
     border-radius: 50%;
     margin-top: 0.5rem;
-    border: white;
+    border: $white;
   }
 
   &__userName {
@@ -45,6 +48,7 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     font-weight: 700;
+    text-align: center;
   }
 
   &__result-container {
@@ -61,11 +65,11 @@
   &__result {
     font-size: 1.5rem;
     line-height: 2rem;
-    color: #e63b38;
+    color: $red;
 
     &--color {
       @extend .round__result;
-      color: #6cc955;
+      color: $green;
     }
   }
 }

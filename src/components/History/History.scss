@@ -1,4 +1,6 @@
+@use "../../styles/partials/colors" as *;
+
 .history {
-  background-color: #353935;
+  background-color: $onyx;
   padding-top: 6rem;
 }

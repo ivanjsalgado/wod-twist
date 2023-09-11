@@ -16,7 +16,6 @@ const Modal = ({ data }) => {
 
   const closeModal = () => {
     setShowModal(false);
-    // window.location.reload();
   };
 
   useEffect(() => {

@@ -14,11 +14,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
-import History from "../../assets/images/noun-recent-1076890_copy-01.svg";
-import MatchIcon from "../../assets/images/ppl3-01.svg";
-import Loading from "../../assets/images/loading_copy.png";
+import History from "../../assets/images/History.svg";
+import MatchIcon from "../../assets/images/Match.svg";
+import Loading from "../../assets/images/Loading.png";
 import Match from "../Match/Match";
-import Leaderboard from "../../assets/images/leader-01.svg";
+import Leaderboard from "../../assets/images/Leaderboard.svg";
 import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
 
@@ -222,13 +222,13 @@ export default function Home() {
               movementsData[loggedInUser].opponentTime
             ) {
               result = "Victory";
-              points = -20;
+              points = 20;
             } else if (
               movementsData[loggedInUser].userTime >
               movementsData[loggedInUser].opponentTime
             ) {
               result = "Defeat";
-              points = 20;
+              points = -20;
             } else {
               result = "Tie";
             }

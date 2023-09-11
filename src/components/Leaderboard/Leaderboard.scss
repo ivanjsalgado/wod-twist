@@ -1,8 +1,9 @@
+@use "../../styles/partials/colors" as *;
+
 .leaderboard {
   margin-top: 5rem;
-  height: 200vw;
-  background-color: #353935;
-  color: white;
+  background-color: $onyx;
+  color: $white;
 
   &__header {
     position: fixed;
@@ -12,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background-color: #353935;
+    background-color: $onyx;
     height: 5rem;
   }
 
