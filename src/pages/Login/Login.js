@@ -7,7 +7,7 @@ import {
 import "./Login.scss";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/WOD_TWIST_fixed.svg";
+import Logo from "../../assets/images/WOD_TWIST_Text.svg";
 import { db, auth } from "../../firebase-config";
 import { setDoc, doc } from "firebase/firestore";
 
@@ -93,11 +93,11 @@ const Login = () => {
           <p className="login__sign-up login__sign-up--ml">Sign up</p>
         </Link>
       </div>
-      <div className="login__option-icons">
+      {/* <div className="login__option-icons">
         <button onClick={signInWithGoogle} class="login__google">
           Sign in with Google
         </button>
-      </div>
+      </div> */}
       {/* <button onClick={logout}>Logout</button> */}
     </div>
   );

@@ -1,4 +1,5 @@
 @use "../../styles/partials/typography" as *;
+@use "../../styles/partials/colors" as *;
 
 .button {
   color: #ffbf00;
@@ -23,7 +24,7 @@
 
   &__container-content {
     width: 75vw;
-    background-color: #353935;
+    background-color: $onyx;
     border-radius: 5px;
     padding: 1rem;
     display: flex;
@@ -38,10 +39,10 @@
 
   &__close-btn {
     width: fit-content;
-    background-color: #353935;
+    background-color: $onyx;
     font-size: 1.5rem;
     cursor: pointer;
-    color: white;
+    color: $white;
   }
 
   &__heading {
@@ -61,12 +62,12 @@
 
   &__movement {
     margin-bottom: 0.5rem;
-    color: white;
+    color: $white;
   }
 
   &__explain {
     margin-top: 1rem;
-    color: white;
+    color: $white;
     font-weight: 700;
   }
 }

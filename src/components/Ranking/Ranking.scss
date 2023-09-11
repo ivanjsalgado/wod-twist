@@ -1,25 +1,26 @@
 @use "../../styles/partials/typography" as *;
+@use "../../styles/partials/colors" as *;
 
 .ranking {
   display: flex;
   margin-left: 1rem;
   margin-right: 1rem;
   &:last-of-type .ranking__container {
-    border-bottom: 2px solid #ffbf00;
+    border-bottom: 2px solid $yellow;
   }
   &__container {
     display: flex;
     width: 100vw;
     height: 15vw;
-    border-top: 2px solid #ffbf00;
-    border-right: 2px solid #ffbf00;
-    border-left: 2px solid #ffbf00;
+    border-top: 2px solid $yellow;
+    border-right: 2px solid $yellow;
+    border-left: 2px solid $yellow;
     align-items: center;
     justify-content: space-between;
 
     &--color {
       @extend .ranking__container;
-      background-color: #494f55;
+      background-color: $grey;
     }
   }
 
@@ -32,11 +33,10 @@
   &__rank {
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    justify-content: flex-end;
     margin-right: 2rem;
     font-size: 2rem;
     font-weight: 700;
+    width: 4vw;
   }
 
   &__pic {
@@ -44,7 +44,7 @@
     width: 10vw;
     border-radius: 50%;
     margin-right: 2rem;
-    border: 2px solid white;
+    border: 2px solid $white;
   }
 
   &__name {

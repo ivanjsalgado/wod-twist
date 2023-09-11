@@ -14,11 +14,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
-import History from "../../assets/images/noun-recent-1076890_copy-01.svg";
-import MatchIcon from "../../assets/images/ppl3-01.svg";
-import Loading from "../../assets/images/loading.png";
+import History from "../../assets/images/History.svg";
+import MatchIcon from "../../assets/images/Match.svg";
+import Loading from "../../assets/images/Loading.png";
 import Match from "../Match/Match";
-import Leaderboard from "../../assets/images/leader-01.svg";
+import Leaderboard from "../../assets/images/Leaderboard.svg";
 import Header from "../Header/Header";
 import Modal from "../Modal/Modal";
 
@@ -33,6 +33,13 @@ export default function Home() {
   const [queued, setQueued] = useState(false);
   const [matched, setMatched] = useState(false);
   const [currentWorkoutID, setCurrentWorkoutID] = useState("");
+  const [workout, setWorkout] = useState(false);
+  const [generateResult, setGenerateResult] = useState(false);
+
+  const updateDataInParent = (newData) => {
+    // Update your data or state here
+    setWorkout(newData);
+  };
 
   const leaderboardClick = () => {
     navigate("/leaderboard", {
@@ -87,7 +94,7 @@ export default function Home() {
     } else {
       updateQueue("delete");
     }
-  }, [queued, matched]);
+  }, [queued]);
 
   const getUserData = async () => {
     try {
@@ -116,7 +123,14 @@ export default function Home() {
     return () => {
       unsubscribe();
     };
-  }, [loggedInUser]);
+  }, [
+    loggedInUser,
+    matched,
+    generateResult,
+    currentWorkoutID,
+    queued,
+    workout,
+  ]);
 
   useEffect(() => {
     if (matchID === "") return;
@@ -128,9 +142,14 @@ export default function Home() {
           const data = await getDoc(matchRef);
           const usersMatchData = data.data();
 
+          // const readyToGenerate =
+          //   usersMatchData[loggedInUser].userSelected &&
+          //   usersMatchData[userData.opponent].userSelected;
+
           const readyToGenerate =
-            usersMatchData[loggedInUser].userSelected &&
-            usersMatchData[userData.opponent].userSelected;
+            usersMatchData[loggedInUser].movement !== "" &&
+            usersMatchData[userData.opponent].movement !== "" &&
+            currentWorkoutID === "";
 
           const readyToLog =
             usersMatchData[loggedInUser].userTime !== 0 &&
@@ -141,6 +160,7 @@ export default function Home() {
             usersMatchData[userData.opponent].retrievedResult;
 
           if (readyToGenerate) {
+            console.log("see me?");
             const opponentRef = doc(db, "users", userData.opponent);
             const getOpponentMovement = await getDoc(opponentRef);
             const opponentMovement = getOpponentMovement.data().movement;
@@ -150,14 +170,28 @@ export default function Home() {
               ...workoutDoc.data(),
               id: workoutDoc.id,
             }));
+
             const viableWorkouts = workouts.filter(
               (workout) =>
-                workout[opponentMovement] && workout[userData.movement]
+                workout[userData.movement] && workout[opponentMovement]
             );
+            // const viableWorkouts = workouts.filter(
+            //   (workout) =>
+            //     workout[opponentMovement] && workout[userData.movement]
+            // );
             const index = Math.floor(Math.random() * viableWorkouts.length);
-            console.log(viableWorkouts[0]);
             const randomWorkoutID = viableWorkouts[index].id;
-            console.log(randomWorkoutID);
+            if (randomWorkoutID !== "") {
+              setCurrentWorkoutID(randomWorkoutID);
+              updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false });
+            }
+            // const randomWorkoutID = viableWorkouts[0].id;
+            // if (randomWorkoutID !== "") {
+            //   setCurrentWorkoutID(randomWorkoutID);
+            //   updateDoc(matchRef, {
+            //     [`${loggedInUser}.userSelected`]: false,
+            //   });
+            // }
 
             const userRef = doc(db, "users", loggedInUser);
             await Promise.all([
@@ -167,17 +201,19 @@ export default function Home() {
               updateDoc(opponentRef, {
                 workoutID: randomWorkoutID,
               }),
-              updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
+              // updateDoc(matchRef, { [`${loggedInUser}.userSelected`]: false }),
             ]);
-            setCurrentWorkoutID(randomWorkoutID);
+            window.location.reload();
           }
 
           if (readyToLog) {
             const userRefAgain = doc(db, "users", loggedInUser);
+            const userOpponentRef = doc(db, "users", userData.opponent);
+            const userOpponentData = await getDoc(userOpponentRef);
+            const opponentSnapData = userOpponentData.data();
             const matchRefAgain = doc(db, "matches", matchID);
             const fetchedMovements = await getDoc(matchRefAgain);
             const movementsData = fetchedMovements.data();
-            console.log(movementsData, "retrieved");
             let result = "";
             let points = 0;
 
@@ -186,13 +222,13 @@ export default function Home() {
               movementsData[loggedInUser].opponentTime
             ) {
               result = "Victory";
-              points = -20;
+              points = 20;
             } else if (
               movementsData[loggedInUser].userTime >
               movementsData[loggedInUser].opponentTime
             ) {
               result = "Defeat";
-              points = 20;
+              points = -20;
             } else {
               result = "Tie";
             }
@@ -207,6 +243,7 @@ export default function Home() {
                 matched: false,
                 movement: "",
                 opponent: "",
+                opponentName: "",
                 opponentPhoto: "",
                 workoutID: "",
                 points: userData.points + points,
@@ -215,11 +252,12 @@ export default function Home() {
                   repetitions: movementsData[loggedInUser].repetitions,
                   workoutID: userData.workoutID,
                   time: Number(movementsData[loggedInUser].userTime),
-                  // opponentPhoto: movementsData[loggedInUser].opponentPhoto,
+                  opponent: userData.opponent,
+                  opponentPhoto: opponentSnapData.photoURL,
                   opponentTime: Number(
                     movementsData[loggedInUser].opponentTime
                   ),
-                  opponentName: userData.opponentName,
+                  opponentName: opponentSnapData.name,
                   result,
                 }),
               }),
@@ -227,15 +265,21 @@ export default function Home() {
           }
 
           if (readyToDelete) {
+            setGenerateResult(true);
             const deleteDocRef = doc(db, "matches", userData.match);
             await deleteDoc(deleteDocRef);
+            setQueued(false);
+            setMatched(false);
+            setCurrentWorkoutID("");
+            setMatchID("");
+            setWorkout(false);
           }
         } catch (error) {
           console.log(error);
         }
       }
     );
-  }, [matchID]);
+  }, [matchID, workout]);
 
   const startMatchmaking = async () => {
     try {
@@ -246,8 +290,6 @@ export default function Home() {
 
       while (queuedUsers.length > 1) {
         console.log("Once match has been found");
-        setMatched(true);
-        setQueued(false);
         const [userOne, userTwo] = queuedUsers.splice(0, 2);
         const matchData = {
           userSelected: false,
@@ -261,9 +303,6 @@ export default function Home() {
         const matchDocRef = doc(db, "matches", generatedMatchID);
         const userOneDocRef = doc(db, "users", userOne.id);
         const userTwoDocRef = doc(db, "users", userTwo.id);
-        const getOpponentInfo = await getDoc(userTwoDocRef);
-        const opponentPhoto = getOpponentInfo.data().photoURL;
-        const opponentName = getOpponentInfo.data().name;
         const userOneQueueDocRef = doc(db, "queueList", userOne.id);
         const userTwoQueueDocRef = doc(db, "queueList", userTwo.id);
 
@@ -276,8 +315,6 @@ export default function Home() {
           updateDoc(userOneDocRef, {
             matched: true,
             opponent: userTwo.id,
-            opponentName: opponentName,
-            opponentPhoto: opponentPhoto,
             match: generatedMatchID,
             queue: false,
             matchTime: 0,
@@ -286,8 +323,6 @@ export default function Home() {
           updateDoc(userTwoDocRef, {
             matched: true,
             opponent: userOne.id,
-            opponentName: userData.name,
-            opponentPhoto: userData.photoURL,
             match: generatedMatchID,
             queue: false,
             matchTime: 0,
@@ -296,6 +331,8 @@ export default function Home() {
           deleteDoc(userOneQueueDocRef),
           deleteDoc(userTwoQueueDocRef),
           setMatchID(generatedMatchID),
+          setQueued(false),
+          setMatched(true),
         ]);
       }
     } catch (err) {
@@ -307,7 +344,6 @@ export default function Home() {
     doc(db, "queueList", "documents"),
     (individualDocument) => {
       startMatchmaking();
-      console.log("Match is outside of if statement");
     }
   );
 
@@ -320,11 +356,11 @@ export default function Home() {
       <Header photo={userData.photoURL} />
       <div className="home__deadline">
         <h1 className="home__title">Submission Timer</h1>
-        <p className="home__time">99:99:99</p>
+        <p className="home__time">00:00</p>
       </div>
       <div className="home__workout-container">
-        {matched && currentWorkoutID === "" ? (
-          <Match userData={userData} />
+        {matched && userData.movement === "" && currentWorkoutID === "" ? (
+          <Match updateDataInParent={updateDataInParent} data={userData} />
         ) : (
           <></>
         )}

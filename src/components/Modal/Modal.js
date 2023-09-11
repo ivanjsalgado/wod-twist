@@ -14,6 +14,10 @@ const Modal = ({ data }) => {
   const [userData, setUserData] = useState(data);
   const [timeSubmitted, setTimeSubmitted] = useState(false);
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   useEffect(() => {
     const getWorkout = async () => {
       const fetchWorkout = await getDoc(doc(db, "workouts", data.workoutID));
@@ -75,10 +79,7 @@ const Modal = ({ data }) => {
         <div className="modal">
           <div className="modal__container-content">
             <div className="modal__close">
-              <span
-                className="modal__close-btn"
-                onClick={() => setShowModal(false)}
-              >
+              <span className="modal__close-btn" onClick={closeModal}>
                 &times;
               </span>
             </div>
@@ -100,7 +101,7 @@ const Modal = ({ data }) => {
               </div>
             </div>
             {data.matchTime !== 0 || timeSubmitted ? (
-              <p>Time has been submitted</p>
+              <p className="modal__submitted">Time has been submitted</p>
             ) : (
               <form className="modal__form" onSubmit={submit}>
                 <div className="modal__form-container">

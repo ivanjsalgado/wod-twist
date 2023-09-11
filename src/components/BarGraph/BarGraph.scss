@@ -1,5 +1,7 @@
+@use "../../styles/partials/colors" as *;
+
 .bar {
   width: 90vw;
   height: 65vw;
-  color: white;
+  color: $white;
 }

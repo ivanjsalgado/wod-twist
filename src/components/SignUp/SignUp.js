@@ -5,7 +5,7 @@ import { auth, db, storage } from "../../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Link, useNavigate } from "react-router-dom";
 import { setDoc, doc } from "firebase/firestore";
-import Logo from "../../assets/images/WOD_TWIST_002-01.svg";
+import Logo from "../../assets/images/WOD_TWIST.svg";
 
 export default function SignUp() {
   const [name, setName] = useState("");

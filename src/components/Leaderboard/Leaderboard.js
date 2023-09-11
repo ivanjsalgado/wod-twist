@@ -1,5 +1,5 @@
 import "./Leaderboard.scss";
-import BackAg from "../../assets/images/Back_Again_copy.png";
+import Back from "../../assets/images/Back_Button.png";
 import { Link, useLocation } from "react-router-dom";
 import Ranking from "../Ranking/Ranking";
 import { db } from "../../firebase-config";
@@ -40,7 +40,7 @@ function Leaderboard() {
     <div className="leaderboard">
       <div className="leaderboard__header">
         <Link style={{ textDecoration: "none", display: "flex" }} to={"/home"}>
-          <img className="leaderboard__back" src={BackAg} alt="Back Icon" />
+          <img className="leaderboard__back" src={Back} alt="Back Icon" />
         </Link>
         <h1 className="leaderboard__heading">Leaderboard</h1>
         <img

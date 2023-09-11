@@ -8,7 +8,6 @@
   min-height: 100vh;
   justify-content: center;
   align-items: center;
-  background-color: #494f55;
   flex-direction: column;
 
   &__heading-container {
@@ -43,7 +42,7 @@
     }
     &:focus {
       outline: none;
-      border: 1.5px solid white;
+      border: 1.5px solid $white;
     }
   }
 
@@ -67,7 +66,7 @@
 
   &__login-button {
     background-color: $white;
-    color: $instock-black;
+    color: black;
     border: transparent;
     border-radius: 0.5rem;
     padding: 0.5rem;
@@ -88,7 +87,7 @@
 
     &--ml {
       margin-left: 0.5rem;
-      color: #7df9ff;
+      color: $light-blue;
     }
   }
 

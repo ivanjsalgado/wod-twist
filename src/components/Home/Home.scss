@@ -1,11 +1,12 @@
 @use "../../styles/partials/typography" as *;
+@use "../../styles/partials/colors" as *;
 
 .home {
   display: flex;
   flex-direction: column;
-  background-color: #353935;
+  background-color: $onyx;
   height: 200vw;
-  color: white;
+  color: $white;
   align-items: center;
 
   &__deadline {
@@ -18,7 +19,7 @@
   }
 
   &__title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 2rem;
     padding-bottom: 1rem;
   }
@@ -26,38 +27,38 @@
   &__time {
     font-size: 1.5rem;
     line-height: 2rem;
-    padding-bottom: 1rem;
   }
 
   &__workout-container {
     display: flex;
     justify-content: center;
+    margin-bottom: 1rem;
   }
 
   &__container-wods {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ffbf00;
-    padding: 1rem;
-    width: 65vw;
+    border: 1px solid $yellow;
+    padding: 1rem 0.5rem;
+    width: 50vw;
     justify-content: center;
     align-items: center;
     border-radius: 1rem;
   }
 
   &__wods-heading {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   &__wods {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
   }
 
   &__graph {
     display: flex;
     justify-content: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
   }
   &__bot-container {
     position: fixed;
@@ -65,7 +66,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
   }
 
   &__footer-btn {

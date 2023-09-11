@@ -1,5 +1,5 @@
 import "./Header.scss";
-import Logo from "../../assets/images/WOD_TWIST_002-01.svg";
+import Logo from "../../assets/images/WOD_TWIST.svg";
 import { Link } from "react-router-dom";
 
 function Header({ photo }) {
