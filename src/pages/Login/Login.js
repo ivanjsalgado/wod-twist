@@ -74,9 +74,9 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className="login__forgot-container">
+        {/* <div className="login__forgot-container">
           <p className="login__small-text">Forget Password?</p>
-        </div>
+        </div> */}
         <div className="login__container-login">
           <button type="submit" className="login__login-button">
             Login

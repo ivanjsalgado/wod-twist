@@ -19,18 +19,22 @@ Technologies and npm packages used:
 
 ## Project Inspiration
 
-I was inspired to create WOD Twist because I'm a naturally competitive person and enjoy fitness. I thought it would be interesting to pair users so that they can compete against each other in a workout where they played a role in tailoring the movements.
-
 My motivation behind creating WOD Twist stemmed from competitive nature and my passion for fitness. I found it interesting to connect users, allowing them to engage in friendly competition where they could actively contribute to customizing the workout.
 
 ## Test the Application Using Firebase Deployment
 
+The application's design was tailored for mobile devices with a viewport width close to 400px.
+
 Open https://fir-login-a156c.web.app/ to view it in your browser.
+
+Enter Inspect Mode and change the viewport width to 400px.
 
 You can use the following email and password to enter if you don't have time to create a login:
 
 Email: try@try.com
 
 Password: 123456
+
+If you do create a new account, importing a photo is not necessary. The user will be given a default profile photo. The alert "Account has been successfully created" will display once the database has been updated. This email and password is your login.
 
 Users are able to queue up by pressing the middle icon (Match Icon) in Home. The icon will change to a loading icon signifying that it is waiting for another user. Once another user is also queued, the matchmaking process will commence.

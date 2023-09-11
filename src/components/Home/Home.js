@@ -16,7 +16,7 @@ import BarGraph from "../BarGraph/BarGraph";
 import "./Home.scss";
 import History from "../../assets/images/History.svg";
 import MatchIcon from "../../assets/images/Match.svg";
-import Loading from "../../assets/images/Loading.png";
+import Loading from "../../assets/images/loading.png";
 import Match from "../Match/Match";
 import Leaderboard from "../../assets/images/Leaderboard.svg";
 import Header from "../Header/Header";
