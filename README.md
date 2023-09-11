@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# WOD Twist
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is my final project at BrainStation (Software Engineering Bootcamp).
 
-## Available Scripts
+Students were given the freedom to use any technology they had acquired during the program and the flexibility to explore and acquire new skills as the project demanded.
 
-In the project directory, you can run:
+On September 7th, 2023, students presented their project to the public, with hiring managers, friends, and family coming together to witness the results of their hard work and innovation.
 
-### `npm start`
+Technologies and npm packages used:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React
+- JavaScript
+- Firebase
+- HTML5
+- Sass
+- dotenv
+- Chart.js
+- React-router-dom
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Inspiration
 
-### `npm test`
+I was inspired to create WOD Twist because I'm a naturally competitive person and enjoy fitness. I thought it would be interesting to pair users so that they can compete against each other in a workout where they played a role in tailoring the movements.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+My motivation behind creating WOD Twist stemmed from competitive nature and my passion for fitness. I found it interesting to connect users, allowing them to engage in friendly competition where they could actively contribute to customizing the workout.
 
-### `npm run build`
+## Test the Application Using Firebase Deployment
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Open https://fir-login-a156c.web.app/ to view it in your browser.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can use the following email and password to enter if you don't have time to create a login:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Email: try@try.com
 
-### `npm run eject`
+Password: 123456
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Users are able to queue up by pressing the middle icon (Match Icon) in Home. The icon will change to a loading icon signifying that it is waiting for another user. Once another user is also queued, the matchmaking process will commence.
